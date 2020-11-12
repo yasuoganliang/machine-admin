@@ -19,38 +19,38 @@ const routes = [
       {
         path: '/user',
         name: 'user',
-        component: () => import(/* webpackChunkName: "about" */ '../views/employee/User')
+        component: () => import('../views/employee/User')
       },
       {
         path: '/troop',
         name: 'troop',
-        component: () => import(/* webpackChunkName: "about" */ '../views/troop/Troop')
+        component: () => import('../views/troop/Troop')
       },
       {
         path: '/troopAdd',
         name: 'troopAdd',
-        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopAdd')
+        component: () => import('../views/troop/TroopAdd.vue')
       },
       {
         path: '/troopEdit/:id',
         name: 'troopEdit',
-        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopEdit')
+        component: () => import('../views/troop/TroopEdit.vue')
       },
       {
         path: '/troopInfo',
         name: 'troopInfo',
-        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopInfo')
+        component: () => import('../views/troop/TroopInfo.vue')
       },
       {
         path: '/job',
         name: 'job',
-        component: () => import(/* webpackChunkName: "about" */ '../views/job/job.vue')
+        component: () => import('../views/job/job.vue')
       },
       {
         // 关于应用页面
         path: '/about',
         name: 'about',
-        component: () => import(/* webpackChunkName: "about" */ '../views/about/About.vue')
+        component: () => import('../views/about/About.vue')
       },
       {
         // 用户信息页面

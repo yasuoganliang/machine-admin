@@ -53,7 +53,7 @@
       </div> -->
       <el-table-column label="操作" width="60">
         <template slot-scope="scope">
-          <!-- <el-button @click="handleClick(1, scope.row)" type="text" size="small">查看</el-button> -->
+          <el-button @click="handleClick(1, scope.row)" type="text" size="small">查看</el-button>
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
         </template>
       </el-table-column>
@@ -111,7 +111,6 @@ export default {
         })
         .then(resp => {
           console.log("resp: ", resp);
-          console.log(resp.data.data.records);
           this.tableData = resp.data.data.troopList;
           this.current = resp.data.data.current;
           this.size = resp.data.data.size;
@@ -120,12 +119,12 @@ export default {
     },
     //操作栏处理函数
     handleClick(i, row) {
-      console.log(row);
+      console.log("handleClick: ", row);
       if (i == 1) {
-        this.$router.push({ name: "TroopInfo", params: { id: row.id } });
+        this.$router.push({ path: "/troopInfo", params: { id: row.id } });
       }
       if (i == 2) {
-        this.$router.push({ name: "TroopEdit", params: { id: row.id } });
+        this.$router.push({ path: "/troopEdit/:id", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},

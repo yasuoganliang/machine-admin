@@ -27,7 +27,9 @@ Vue.prototype.$global_msg = global_msg;
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location, onResolve, onReject) {
+  console.log("if before location: ", location);
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  console.log("else location: ", location);
   return originalPush.call(this, location).catch(err => err)
 
 }

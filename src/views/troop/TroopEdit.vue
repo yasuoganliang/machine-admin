@@ -57,13 +57,10 @@
             </el-upload>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+            <el-button type="primary" @click="onSubmit('form')">确认修改</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
         </el-form>
-      </div>
-      <div class="avator">
-        <el-avatar shape="square" :size="200" :src="url"></el-avatar>
       </div>
     </div>
     <br />
@@ -137,19 +134,25 @@ export default {
         ]
       },
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
     };
   },
   methods: {
+    handleAvatarSuccess(res) {
+      console.info(res.data);
+      this.$message.success("添加成功");
+      this.ruleForm = {};
+      this.$router.push("/troop");
+    },
+    reset(form) {
+      this.$refs[form].resetFields();
+    },
     onSubmit(form) {
-      console.log("submit!");
       this.$refs[form].validate(valid => {
         if (valid) {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "employee/update",
+              url: this.$global_msg.host + "troop/update",
               data: this.form,
               headers: {
                 "Content-Type": "application/json;charset=UTF-8"
