@@ -1,0 +1,200 @@
+<template>
+  <div class="troopEdit">
+    <div>
+      <span>编辑支队信息</span>
+      <el-divider></el-divider>
+    </div>
+
+    <!-- 编辑表单 -->
+    <div class="box">
+      <div class="form">
+        <el-form
+          ref="form"
+          :model="form"
+          :rules="rules"
+          label-width="60px"
+          size="mini"
+          :inline="true"
+        >
+        <el-form-item label="支队" prop="troop">
+            <el-select v-model="form.id" placeholder="选择支队">
+              <el-option
+                v-for="(troop, index) in troops"
+                :label="troop.name"
+                :value="troop.id"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="IP 地址段" prop="ip">
+            <el-input v-model="form.ip"></el-input>
+          </el-form-item>
+          <br />
+          <el-form-item label="首页链接" prop="home_url">
+            <el-input v-model="form.home_url"></el-input>
+          </el-form-item>
+          <el-form-item label="待机时长" prop="standby_time">
+            <el-input v-model="form.standby_time"></el-input>
+          </el-form-item>
+          <br />
+          <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
+            <el-input v-model="form.banner_interval"></el-input>
+          </el-form-item>
+          <el-form-item label="背景图片上传">
+            <el-upload  class="avator"
+              action="http://localhost:10010/goods/addGoods"
+                list-type="picture-card"
+                :on-success="handleAvatarSuccess"
+                ref="upload"
+                :auto-upload="false"
+                :limit="1"
+                :data="ruleForm"
+              >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+            <el-button @click="reset('form')">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="avator">
+        <el-avatar shape="square" :size="200" :src="url"></el-avatar>
+      </div>
+    </div>
+    <br />
+    <br />
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  created() {
+    let headers = {
+      headers: {
+        token: sessionStorage.getItem("token")
+      }
+    }
+    axios.get(this.$global_msg.host + "troop/edit-info", headers).then(resp => {
+      console.log("troop/edit-info: ", resp);
+      this.form = resp.data.data.troopEditInfo;
+      this.upload = resp.data.data.troopEditInfo.background_url
+    });
+
+    // 获取用户信息
+    console.log("this.$route.params.id: ", this.$route.params.id);
+    if (this.$route.params.id != null) {
+      axios
+        .get(this.$global_msg.host + "troop/get-info-by-id?sys_id=" + this.$route.params.id, headers)
+        .then(resp => {
+          console.log(resp);
+          this.form = resp.data.data.troopInfo;
+          this.upload = resp.data.data.troopInfo.background_url
+          console.log(this.form);
+        });
+    }
+    
+    axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
+      console.log("resp: ", resp);
+      this.troops = resp.data.data.troopList;
+    });
+  },
+  data() {
+    return {
+      ruleForm: {},
+      upload: "",
+      troops: [],
+      form: {
+        name: "",
+        ip: "",
+        home_url: "",
+        standby_time: 0,
+        banner_interval: 0,
+        background_url: ""
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入支队名称", trigger: "blur" },
+          { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
+        ],
+        ip: [
+          { required: true, message: "请输入 IP 地址段", trigger: "blur" }
+        ],
+        home_url: [
+          { required: true, message: "请输入主页链接", trigger: "blur" }
+        ],
+        banner_interval: [
+          { required: true, message: "请输入轮播图播放时长，时间为秒", trigger: "blur" }
+        ],
+        standby_time: [
+          { required: true, message: "请输入待机时长，时间为秒", trigger: "blur" }
+        ]
+      },
+      fits: ["fill"],
+      url:
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+    };
+  },
+  methods: {
+    onSubmit(form) {
+      console.log("submit!");
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          axios
+            .request({
+              method: "post",
+              url: this.$global_msg.host + "employee/update",
+              data: this.form,
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+              }
+            })
+            .then(
+              resp => {
+                console.log(resp);
+                if (resp.data.code == 200) {
+                  this.$notify({
+                    title: "成功",
+                    message: "更新成功了",
+                    type: "success"
+                  });
+                } else {
+                  this.$notify.error({
+                    title: "失败",
+                    message: "更新失败了"
+                  });
+                }
+              },
+              error => {
+                this.$notify.error({
+                  title: "失败",
+                  message: "更新失败了"
+                });
+              }
+            );
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+      console.log(this.form);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.box {
+  display: flex;
+  justify-content: space-between;
+  .avator {
+    margin-left: 30px;
+  }
+}
+</style>

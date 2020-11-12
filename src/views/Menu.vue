@@ -15,8 +15,8 @@
           <i class="el-icon-user iconfont icon-yuangongguanli"></i>支队管理
         </template>
         <el-menu-item-group>
-          <el-menu-item index="1-1" @click="openPage(1)">支队列表</el-menu-item>
-          <el-menu-item index="1-2" @click="openPage(5)">增加支队</el-menu-item>
+          <el-menu-item index="1-1" @click="openPage(11)">支队列表</el-menu-item>
+          <el-menu-item index="1-2" @click="openPage(12)">增加支队</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2" v-if="this.isSuper">
@@ -123,6 +123,12 @@ export default {
           break;
         case 10:
           this.$router.push("/addDept");
+          break;
+        case 11:
+          this.$router.push("/troop");
+          break;
+        case 12:
+          this.$router.push("/troopAdd");
           break;
       }
     },

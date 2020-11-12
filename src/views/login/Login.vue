@@ -152,7 +152,7 @@ export default {
             console.log("login data: ", res.data.data);
             if (res.status == 200 && res.data.statusCode == 1) {
               let user = {
-                token: res.data.token,
+                token: res.data.data.token,
                 name: res.data.data.adminInfo.name,
                 id: res.data.data.adminInfo.id,
                 sys_id: res.data.data.adminInfo.sys_id,

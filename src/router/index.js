@@ -22,6 +22,26 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/employee/User')
       },
       {
+        path: '/troop',
+        name: 'troop',
+        component: () => import(/* webpackChunkName: "about" */ '../views/troop/Troop')
+      },
+      {
+        path: '/troopAdd',
+        name: 'troopAdd',
+        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopAdd')
+      },
+      {
+        path: '/troopEdit/:id',
+        name: 'troopEdit',
+        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopEdit')
+      },
+      {
+        path: '/troopInfo',
+        name: 'troopInfo',
+        component: () => import(/* webpackChunkName: "about" */ '../views/troop/TroopInfo')
+      },
+      {
         path: '/job',
         name: 'job',
         component: () => import(/* webpackChunkName: "about" */ '../views/job/job.vue')
@@ -89,14 +109,14 @@ const router = new VueRouter({
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
+  // console.log(to);
+  // console.log(from);
   if (to.path == '/login') {
     console.log("登录页面");
     next();
   } else {
     let token = sessionStorage.getItem('token');
-    console.log(token);
+    // console.log(token);
     // 这个 null 不是字符串 'null'
     if (token == null || token == '') {
       console.log('跳转页面')

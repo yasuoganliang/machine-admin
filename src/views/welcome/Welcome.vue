@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="screen-monitor">
+    <!-- <div class="screen-monitor">
       <img 
           class="screenshot" 
           :src="screenshot"
@@ -28,7 +28,7 @@
           @click="handleMouseEvent"
           @dblclick="handleMouseEvent" 
       />
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
