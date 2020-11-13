@@ -30,33 +30,69 @@
             <el-input v-model="form.standby_time"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="幻灯片播放时长" prop="banner_interval">
+          <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
             <el-input v-model="form.banner_interval"></el-input>
           </el-form-item>
-          <br />
-          <el-form-item label="背景图片上传"  prop="background_url">
+          <el-form-item label="背景图片">
+            <img
+              :src="form.background_url"
+              style="border-radius: 5%"
+              alt="原图"
+              width="146px"
+              height="146px"
+              fit="cover"
+            />
+          </el-form-item>
+          <el-form-item label="背景图片上传">
             <el-upload
+              :multiple="true"
+              :file-list="fileList"
               :action="uploadUrl"
+              :limit="5"
+              :on-change="handleChange"
+              ref="upload"
               list-type="picture-card"
               :on-exceed="handleExceed"
               :on-success="handleSuccess"
               :on-error="handleError"
-              :on-change="handleChange"
-              ref="upload"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove">
-              <i class="el-icon-plus"></i>
+              accept=".jpg, .jpeg, .png, .gif, .bmp, .pdf, .JPG, .JPEG, .PBG, .GIF, .BMP, .PDF"
+              :auto-upload="false"
+            >
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{ file }">
+                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+            <el-dialog :visible.sync="dialogVisible_2">
+              <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
-          <br />
-          <el-form-item class="el-submit">
+          <el-form-item>
             <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
-          <br />
         </el-form>
       </div>
     </div>
@@ -70,12 +106,19 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}common/update-pic`
+    // axios.get(this.$global_msg.host + "troop/edit-info", {
+    //   headers: {
+    //     token: sessionStorage.getItem("token")
+    //   }
+    // }).then(resp => {
+    //   console.log("troop/edit-info: ", resp);
+    //   this.form = resp.data.data.troopEditInfo;
+    //   this.upload = resp.data.data.troopEditInfo.background_url
+    // });
   },
-  inject:['reload'],
   data() {
     return {
-      dialogVisible: false,
       dialogImageUrl: "",
       dialogVisible_2: false,
       oldImg: false,
@@ -88,8 +131,8 @@ export default {
         name: "",
         ip: "",
         home_url: "",
-        standby_time: 600,
-        banner_interval: 60,
+        standby_time: 0,
+        banner_interval: 0,
         background_url: ""
       },
       rules: {
@@ -129,24 +172,25 @@ export default {
         if (valid) {
           axios
             .request({
+              headers: {
+                token: sessionStorage.getItem("token")
+              },
               method: "post",
               url: this.$global_msg.host + "troop/add",
               data: this.form,
               headers: {
-                "token": sessionStorage.getItem("token"),
                 "Content-Type": "application/json;charset=UTF-8"
               }
             })
             .then(
               resp => {
-                console.log("troop/add: ", resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                console.log(resp);
+                if (resp.data.code == 200) {
                   this.$notify({
                     title: "成功",
-                    message: "添加成功",
+                    message: "插入成功了",
                     type: "success"
                   });
-                  this.$router.push({ name: "troop" });
                 } else {
                   this.$notify.error({
                     title: "失败",
@@ -169,9 +213,9 @@ export default {
           return false;
         }
       });
+      console.log(this.form);
     },
     handleChange(file, fileList) {
-      console.log("handleChange: ", file);
       this.imageFile = file.raw;
       if (file.status === "success") {
         console.log("OK");
@@ -185,21 +229,19 @@ export default {
     handleSuccess(res) {
       console.log("handleSuccess: ", res);
       this.$message.success("图片上传成功");
-      this.form.background_url = res.data.data[0].pic_url; //我添加
+      this.currentGoods.imgSrc = "服务器返回的路径"; //我添加
     },
-    handleRemove(file, fileList) {;
-      console.log("handleRemove: ", file);
+    handleRemove(file) {
+      console.log(file);
     },
 
     handleExceed(files, fileList) {
-      console.log("handleExceed: ", files, fileList);
       this.$message.warning(`当前限制选择 1 个文件`);
     },
 
     handlePictureCardPreview(file) {
-      console.log("handlePictureCardPreview: ", file);
       this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      this.dialogVisible_2 = true;
     },
     handleDownload(file) {
       console.log(file);
@@ -212,12 +254,8 @@ export default {
 .box {
   display: flex;
   justify-content: space-between;
-  text-align: left;
   .avator {
     margin-left: 30px;
-  };
-  .el-submit {
-    margin-left: 200px;
   }
 }
 </style>

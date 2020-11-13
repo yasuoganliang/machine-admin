@@ -10,17 +10,20 @@
       v-loading="loading"
       size="mini"
     >
-      <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
-      <el-table-column prop="name" label="支队名称"></el-table-column>
-      <el-table-column prop="ip" label="IP网段" width="105"></el-table-column>
-      <el-table-column prop="home_url" label="首页链接"></el-table-column>
-      <el-table-column prop="background_url" label="背景图片">
+      <el-table-column prop="id" label="管理员ID" width="75"></el-table-column>
+      <el-table-column prop="name" label="管理员名称"></el-table-column>
+      <el-table-column prop="avatar" label="头像">
         <template   slot-scope="scope">
-          <img :src="scope.row.background_url"  min-width="220" height="70" />
+          <img :src="scope.row.avatar"  min-width="220" height="70" />
         </template>
       </el-table-column>
-      <el-table-column prop="standby_time" label="待机时长（秒）"></el-table-column>
-      <el-table-column prop="banner_interval" label="图片幻灯片播放时长（秒）"></el-table-column>
+      <el-table-column prop="troop_name" label="所属支队"  width="95"></el-table-column>
+      <el-table-column prop="is_super_admin" label="超级管理员"  width="95">
+        <template slot-scope="scope">{{ scope.row.is_super_admin == 1 ? '是': '否' }}</template>
+      </el-table-column>
+      <el-table-column prop="is_super_admin" label="管理员"  width="95">
+        <template slot-scope="scope">{{ scope.row.is_super_admin == 1 ? '是': '否' }}</template>
+      </el-table-column>
       <el-table-column prop="is_enable" label="是否启用"  width="75">
         <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
       </el-table-column>
@@ -54,6 +57,7 @@ export default {
   inject:['reload'],
   data() {
     return {
+      belongTroop: "",
       tableData: [],
       current: 1, //当前页面
       size: 10, //每页显示条数
@@ -74,7 +78,7 @@ export default {
     // 分页查询
     troopList() {
       axios
-        .get(this.$global_msg.host + "troop/list", {
+        .get(this.$global_msg.host + "role/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -84,8 +88,8 @@ export default {
           }
         })
         .then(resp => {
-          // console.log("resp: ", resp);
-          this.tableData = resp.data.data.troopList;
+          console.log("resp: ", resp);
+          this.tableData = resp.data.data.roleList;
           this.current = resp.data.data.current;
           this.size = resp.data.data.size;
           this.total = resp.data.data.total;
@@ -99,13 +103,13 @@ export default {
       }
       if (i == 2) {
         // console.log("row.id: ", row.id);
-        this.$router.push({ name: "troopEdit", params: { id: row.id } });
+        this.$router.push({ name: "roleEdit", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},
     delTroop(id) {
       axios
-        .delete(this.$global_msg.host + "troop/del?sys_id=" + id, {
+        .delete(this.$global_msg.host + "role/del?role_id=" + id, {
           headers: {
             token: sessionStorage.getItem("token")
           }

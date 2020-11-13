@@ -148,8 +148,8 @@ export default {
           data: params,
         })
           .then((res) => {
-            console.log("res: ", res.status);
-            console.log("login data: ", res.data.data);
+            // console.log("res: ", res.status);
+            // console.log("login data: ", res.data.data);
             if (res.status == 200 && res.data.statusCode == 1) {
               let user = {
                 token: res.data.data.token,
@@ -159,9 +159,9 @@ export default {
                 isSuper: res.data.data.adminInfo.isSuper,
                 avatar_url: res.data.data.adminInfo.avatar || null,
               };
-              console.log("user: ", user);
+              // console.log("user: ", user);
               _this.changeLogin(user);
-              console.log("success login");
+              // console.log("success login");
               _this.$router.push("/");
             } else if (res.status == 404) {
               this.$message.error("status 404: ", res.data.msg);

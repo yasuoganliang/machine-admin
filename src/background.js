@@ -58,7 +58,7 @@ function createWindow() {
             webSecurity: false
         },
         //设置窗口应用图标, __static 对应 public 目录
-        icon: `${__static}/bilibili.png`,
+        icon: `${__static}/timg.jpg`,
         //关闭系统标题栏
         useContentSize: true,
         frame: false
@@ -80,7 +80,7 @@ function createWindow() {
         }
     ];
     // 托盘图标
-    appTray = new Tray(`${__static}/bilibili.png`);
+    appTray = new Tray(`${__static}/timg.jpg`);
     //图标的上下文菜单
     const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
     // 设置托盘图标的悬停提升内容

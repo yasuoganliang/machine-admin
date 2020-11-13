@@ -1,7 +1,7 @@
 <template>
-  <div id="troopList">
+  <div id="userList">
     <el-table
-      ref="singleTable"
+      ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
@@ -10,6 +10,7 @@
       v-loading="loading"
       size="mini"
     >
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
       <el-table-column prop="name" label="支队名称"></el-table-column>
       <el-table-column prop="ip" label="IP网段" width="105"></el-table-column>
@@ -20,14 +21,14 @@
         </template>
       </el-table-column>
       <el-table-column prop="standby_time" label="待机时长（秒）"></el-table-column>
-      <el-table-column prop="banner_interval" label="图片幻灯片播放时长（秒）"></el-table-column>
+      <el-table-column prop="banner_interval" label="图片幻灯片播放时长"></el-table-column>
       <el-table-column prop="is_enable" label="是否启用"  width="75">
         <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="120">
+      <el-table-column label="操作" width="60">
         <template slot-scope="scope">
+          <!-- <el-button @click="handleClick(1, scope.row)" type="text" size="small">查看</el-button> -->
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
-          <el-button @click="handleClick(1, scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -51,7 +52,6 @@ import axios from "axios";
 import { mapMutations, mapState } from "vuex";
 export default {
   computed: mapState(["isSuper"]),
-  inject:['reload'],
   data() {
     return {
       tableData: [],
@@ -84,7 +84,7 @@ export default {
           }
         })
         .then(resp => {
-          // console.log("resp: ", resp);
+          console.log("resp: ", resp);
           this.tableData = resp.data.data.troopList;
           this.current = resp.data.data.current;
           this.size = resp.data.data.size;
@@ -93,27 +93,15 @@ export default {
     },
     //操作栏处理函数
     handleClick(i, row) {
+      console.log("handleClick: ", row);
       if (i == 1) {
-        this.delTroop(row.id);
-        this.reload();
+        this.$router.push({ path: "/troopInfo", params: { id: row.id } });
       }
       if (i == 2) {
-        // console.log("row.id: ", row.id);
-        this.$router.push({ name: "troopEdit", params: { id: row.id } });
+        this.$router.push({ path: "/troopEdit/:id", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},
-    delTroop(id) {
-      axios
-        .delete(this.$global_msg.host + "troop/del?sys_id=" + id, {
-          headers: {
-            token: sessionStorage.getItem("token")
-          }
-        })
-        .then(resp => {
-          
-        });
-    },
     filterTag() {},
     //点击每个表格栏
     click(row, column, cell, event) {

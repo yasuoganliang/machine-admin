@@ -22,7 +22,7 @@ export default new Vuex.Store({
   mutations: {
     // 修改token，并将token存入localStorage
     changeLogin(state, user) {
-      console.log(user);
+      // console.log(user);
       state.token = user.token;
       state.adminName = user.name;
       state.adminId = user.id;
@@ -37,7 +37,7 @@ export default new Vuex.Store({
       sessionStorage.setItem('avatar', user.avatar);
     },
     // 修改token，并将token存入localStorage
-    setSebsock(state, websock) {
+    setWebsock(state, websock) {
       console.log(websock);
       state.websock = user.websock;
       sessionStorage.setItem('websock', user.websock);

@@ -12,11 +12,11 @@
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="60px"
+          label-width="200px"
           size="mini"
           :inline="true"
         >
-        <el-form-item label="支队" prop="troop">
+          <!-- <el-form-item label="支队" prop="troop">
             <el-select v-model="form.id" placeholder="选择支队">
               <el-option
                 v-for="(troop, index) in troops"
@@ -25,7 +25,7 @@
                 :key="index"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
@@ -43,20 +43,36 @@
           <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
             <el-input v-model="form.banner_interval"></el-input>
           </el-form-item>
-          <el-form-item label="背景图片上传">
-            <el-upload  class="avator"
-              action="http://localhost:10010/goods/addGoods"
-                list-type="picture-card"
-                :on-success="handleAvatarSuccess"
-                ref="upload"
-                :auto-upload="false"
-                :limit="1"
-                :data="ruleForm"
-              >
+          <br />
+          <el-form-item label="背景图片上传"  prop="background_url">
+            <el-upload
+              :action="uploadUrl"
+              list-type="picture-card"
+              :on-exceed="handleExceed"
+              :on-success="handleSuccess"
+              :on-error="handleError"
+              :on-change="handleChange"
+              ref="upload"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove">
               <i class="el-icon-plus"></i>
             </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
           </el-form-item>
-          <el-form-item>
+          <el-form-item label="原背景图片">
+            <img
+              :src="originUrl"
+              style="border-radius: 5%"
+              alt="原背景图片"
+              width="146px"
+              height="146px"
+              fit="cover"
+            />
+          </el-form-item>
+          <br />
+          <el-form-item style="margin-left: 200px">
             <el-button type="primary" @click="onSubmit('form')">确认修改</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
@@ -73,43 +89,43 @@ import axios from "axios";
 
 export default {
   created() {
+    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`
     let headers = {
       headers: {
         token: sessionStorage.getItem("token")
       }
     }
-    axios.get(this.$global_msg.host + "troop/edit-info", headers).then(resp => {
-      console.log("troop/edit-info: ", resp);
-      this.form = resp.data.data.troopEditInfo;
-      this.upload = resp.data.data.troopEditInfo.background_url
-    });
 
     // 获取用户信息
-    console.log("this.$route.params.id: ", this.$route.params.id);
+    console.log("this.$route.params.id: ", this.$route.params);
     if (this.$route.params.id != null) {
+      let url = `${this.$global_msg.host}troop/get-info-by-id?sys_id=${this.$route.params.id}`
       axios
-        .get(this.$global_msg.host + "troop/get-info-by-id?sys_id=" + this.$route.params.id, headers)
+        .get(url, headers)
         .then(resp => {
-          console.log(resp);
+          // console.log(resp);
           this.form = resp.data.data.troopInfo;
           this.upload = resp.data.data.troopInfo.background_url
-          console.log(this.form);
+          this.originUrl = resp.data.data.troopInfo.background_url
+          // console.log(this.form);
         });
     }
-    
-    axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
-      console.log("resp: ", resp);
-      this.troops = resp.data.data.troopList;
-    });
   },
   data() {
     return {
+      originUrl: "",
+      dialogImageUrl: "",
+      dialogVisible: false,
+      disabled: false,
+      fileList: [],
+      uploadUrl: '',
       ruleForm: {},
       upload: "",
       troops: [],
       form: {
         name: "",
         ip: "",
+        sys_id: "",
         home_url: "",
         standby_time: 0,
         banner_interval: 0,
@@ -149,35 +165,38 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
+          this.form.sys_id = this.form.id;
           axios
             .request({
-              method: "post",
+              method: "put",
               url: this.$global_msg.host + "troop/update",
               data: this.form,
               headers: {
+                "token": sessionStorage.getItem("token"),
                 "Content-Type": "application/json;charset=UTF-8"
               }
             })
             .then(
               resp => {
-                console.log(resp);
-                if (resp.data.code == 200) {
+                // console.log(resp);
+                if (resp.status == 200 && resp.data.statusCode == 1) {
                   this.$notify({
                     title: "成功",
-                    message: "更新成功了",
+                    message: "更新成功",
                     type: "success"
                   });
+                  this.$router.push("/troop");
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: "更新失败了"
+                    message: "更新失败"
                   });
                 }
               },
               error => {
                 this.$notify.error({
                   title: "失败",
-                  message: "更新失败了"
+                  message: "更新失败"
                 });
               }
             );
@@ -186,8 +205,39 @@ export default {
           return false;
         }
       });
-      console.log(this.form);
-    }
+      // console.log(this.form);
+    },
+    handleChange(file, fileList) {
+      this.imageFile = file.raw;
+      if (file.status === "success") {
+        console.log("OK");
+      }
+    },
+    handleError(err, file, fileList) {
+      console.log("错误", err);
+      this.$message.warning("上传图片失败请重试！");
+    },
+
+    handleSuccess(res) {
+      console.log("handleSuccess: ", res);
+      this.$message.success("图片上传成功");
+      this.form.background_url = res.data.data[0].pic_url;
+    },
+    handleRemove(file) {
+      console.log(file);
+    },
+
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件`);
+    },
+
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleDownload(file) {
+      console.log(file);
+    },
   }
 };
 </script>

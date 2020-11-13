@@ -24,35 +24,25 @@
           <i class="el-icon-tickets iconfont icon-personnel-file"></i>支队管理员
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1" @click="openPage(7)"
-            >管理员列表</el-menu-item
-          >
-          <el-menu-item index="2-1" @click="openPage(5)"
-            >增加管理员</el-menu-item
-          >
+          <el-menu-item index="2-1" @click="openPage(13)">管理员列表</el-menu-item>
+          <el-menu-item index="2-1" @click="openPage(14)">增加管理员</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3">
         <template slot="title">
-          <i class="el-icon-menu el-icon-user iconfont icon-bumen"></i
-          >网上荣誉室
+          <i class="el-icon-menu el-icon-user iconfont icon-bumen"></i>网上荣誉室
         </template>
         <el-menu-item-group>
           <el-menu-item index="3-1" @click="openPage(6)">部门列表</el-menu-item>
-          <el-menu-item index="3-1" @click="openPage(10)"
-            >添加部门</el-menu-item
-          >
+          <el-menu-item index="3-1" @click="openPage(10)">添加部门</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>红色家谱
-        </template>
+          <i class="el-icon-setting iconfont icon-wode"></i>红色家谱</template>
         <el-menu-item-group>
           <el-menu-item index="4-1" @click="openPage(6)">家谱列表</el-menu-item>
-          <el-menu-item index="4-2" @click="openPage(5)"
-            >增加成员</el-menu-item
-          >
+          <el-menu-item index="4-2" @click="openPage(5)">增加成员</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="5">
@@ -79,11 +69,9 @@
       </el-submenu>
       <el-submenu index="7">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>个人信息
-        </template>
+          <i class="el-icon-setting iconfont icon-wode"></i>个人信息</template>
         <el-menu-item-group>
-          <el-menu-item index="7-1" @click="openPage(8)"
-            >修改基本信息</el-menu-item
+          <el-menu-item index="7-1" @click="openPage(8)">修改个人信息</el-menu-item
           >
           <!-- <el-menu-item index="3-2">选项2</el-menu-item> -->
         </el-menu-item-group>
@@ -129,6 +117,36 @@ export default {
           break;
         case 12:
           this.$router.push("/troopAdd");
+          break;
+        case 13:
+          this.$router.push("/role");
+          break;
+        case 14:
+          this.$router.push("/roleAdd");
+          break;
+        case 15:
+          this.$router.push("/person");
+          break;
+        case 16:
+          this.$router.push("/personAdd");
+          break;
+        case 17:
+          this.$router.push("/video");
+          break;
+        case 18:
+          this.$router.push("/videoAdd");
+          break;
+        case 19:
+          this.$router.push("/story");
+          break;
+        case 20:
+          this.$router.push("/storyAdd");
+          break;
+        case 21:
+          this.$router.push("/banner");
+          break;
+        case 22:
+          this.$router.push("/bannerAdd");
           break;
       }
     },

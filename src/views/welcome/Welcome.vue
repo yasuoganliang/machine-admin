@@ -40,14 +40,17 @@ export default {
   created() {
     // 声命周期钩子函数, 用于获取部门，工作，学历列表
     if (this.adminId != null) {
+      let headers = {
+        headers: {
+          token: sessionStorage.getItem("token")
+        }
+      }
+       let url = `${this.$global_msg.host}role/get-info-by-id?role_id=${this.adminId}`
       axios
-        .get(
-          this.$global_msg.host + "employee/getEmployeeById?id=" + this.userId
-        )
-        .then((resp) => {
-          console.log(resp);
-          this.form = resp.data;
-          console.log(this.form);
+        .get(url, headers)
+        .then(resp => {
+          // console.log("welcome: ", resp);
+          this.form = resp.data.data.roleInfo;
         });
     }
   },
@@ -84,7 +87,7 @@ export default {
 .card-panel-col {
   margin-bottom: 6px;
   margin-right: 10px;
-  width: 23%;
+  width: 33%;
   .card-panel {
     &:hover {
       background-color: #f8f8f8;
