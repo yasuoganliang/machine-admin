@@ -33,8 +33,7 @@
           <i class="el-icon-menu el-icon-user iconfont icon-bumen"></i>网上荣誉室
         </template>
         <el-menu-item-group>
-          <el-menu-item index="3-1" @click="openPage(6)">部门列表</el-menu-item>
-          <el-menu-item index="3-1" @click="openPage(10)">添加部门</el-menu-item>
+          <el-menu-item index="3-1" @click="openPage(7)">修改主页链接</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
@@ -101,7 +100,7 @@ export default {
           this.$router.push("/deptlist");
           break;
         case 7:
-          this.$router.push("/personnelList");
+          this.$router.push("/editHomeInfo");
           break;
         case 8:
           this.$router.push({ name: "editMe", params: { id: this.adminId } });

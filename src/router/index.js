@@ -43,6 +43,11 @@ const routes = [
         component: () => import('../views/troop/TroopInfo.vue')
       },
       {
+        path: '/editHomeInfo',
+        name: 'editHomeInfo',
+        component: () => import('../views/troop/EditHomeInfo.vue')
+      },
+      {
         // 管理员角色列表
         path: '/role',
         name: 'role',
@@ -180,7 +185,7 @@ const routes = [
         // 编辑个人基本信息页面
         path: '/editMe/:id',
         name: 'editMe',
-        component: () => import('../views/employee/UserEdit2.vue')
+        component: () => import('../views/personnel/UserEdit2.vue')
       },
       {
         // 部门列表

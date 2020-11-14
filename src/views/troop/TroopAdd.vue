@@ -19,10 +19,10 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="IP 地址段" prop="ip">
+          <!-- <el-form-item label="IP 地址段" prop="ip">
             <el-input v-model="form.ip"></el-input>
           </el-form-item>
-          <br />
+          <br /> -->
           <el-form-item label="首页链接" prop="home_url">
             <el-input v-model="form.home_url"></el-input>
           </el-form-item>

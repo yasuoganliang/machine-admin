@@ -1,7 +1,7 @@
 <template>
   <div class="troopEdit">
     <div>
-      <span>编辑管理员角色</span>
+      <span>编辑支队主页信息</span>
       <el-divider></el-divider>
     </div>
 
@@ -12,19 +12,39 @@
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="300px"
+          label-width="200px"
           size="mini"
           :inline="true"
         >
-          <el-form-item prop="name" label="管理员名称">
+          <!-- <el-form-item label="支队" prop="troop">
+            <el-select v-model="form.id" placeholder="选择支队">
+              <el-option
+                v-for="(troop, index) in troops"
+                :label="troop.name"
+                :value="troop.id"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </el-form-item> -->
+          <el-form-item label="名称" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
+          <!-- <el-form-item label="IP 地址段" prop="ip">
+            <el-input v-model="form.ip"></el-input>
+          </el-form-item> -->
           <br />
-          <el-form-item prop="passwd" label="管理员密码">
-            <el-input v-model="form.passwd" show-password></el-input>
+          <el-form-item label="首页链接" prop="home_url">
+            <el-input v-model="form.home_url"></el-input>
+          </el-form-item>
+          <el-form-item label="待机时长" prop="standby_time">
+            <el-input v-model="form.standby_time"></el-input>
           </el-form-item>
           <br />
-          <!-- <el-form-item label="头像上传"  prop="avatar">
+          <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
+            <el-input v-model="form.banner_interval"></el-input>
+          </el-form-item>
+          <br />
+          <el-form-item label="背景图片上传"  prop="background_url">
             <el-upload
               :action="uploadUrl"
               list-type="picture-card"
@@ -41,48 +61,21 @@
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
           </el-form-item>
-          <br /> -->
-          <el-form-item label="选择管理支队" prop="troop">
-            <el-select v-model="form.sys_id" placeholder="选择支队">
-              <el-option
-                v-for="(troop, index) in troops"
-                :label="troop.name"
-                :value="troop.id"
-                :key="index"
-              ></el-option>
-            </el-select>
+          <el-form-item label="原背景图片">
+            <img
+              :src="originUrl"
+              style="border-radius: 5%"
+              alt="原背景图片"
+              width="146px"
+              height="146px"
+              fit="cover"
+            />
           </el-form-item>
           <br />
-          <el-form-item prop="is_super_admin" label="超级管理员">
-            <el-switch
-              v-model="isSuperAdmin"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-          </el-form-item>
-          <br />
-          <el-form-item prop="is_admin" label="管理员">
-            <el-switch
-              v-model="isAdmin"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-          </el-form-item>
-          <br />
-          <el-form-item prop="is_enable" label="是否启用">
-            <el-switch
-              v-model="isEnable"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-            <!-- <el-input v-model="form.standby_time"></el-input> -->
-          </el-form-item>
-          <br />
-          <el-form-item class="el-submit">
+          <el-form-item style="margin-left: 200px">
             <el-button type="primary" @click="onSubmit('form')">确认修改</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
-          <br />
         </el-form>
       </div>
     </div>
@@ -102,59 +95,58 @@ export default {
         token: sessionStorage.getItem("token")
       }
     }
-    axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
-      console.log("resp: ", resp);
-      this.troops = resp.data.data.troopList;
-    });
-     // 获取用户信息
+
+    // 获取用户信息
     console.log("this.$route.params.id: ", this.$route.params);
     if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}role/get-info-by-id?role_id=${this.$route.params.id}`
+      let url = `${this.$global_msg.host}troop/get-info-by-id?sys_id=${this.$route.params.id}`
       axios
         .get(url, headers)
         .then(resp => {
           // console.log(resp);
-          this.form = resp.data.data.roleInfo;
+          this.form = resp.data.data.troopInfo;
+          this.upload = resp.data.data.troopInfo.background_url
+          this.originUrl = resp.data.data.troopInfo.background_url
           // console.log(this.form);
         });
     }
   },
-  inject:['reload'],
   data() {
     return {
-      isSuperAdmin: false,
-      isAdmin: true,
-      isEnable: true,
-      troops: [],
-      dialogVisible: false,
+      originUrl: "",
       dialogImageUrl: "",
-      dialogVisible_2: false,
-      oldImg: false,
+      dialogVisible: false,
       disabled: false,
       fileList: [],
-      uploadUrl: "",
+      uploadUrl: '',
       ruleForm: {},
       upload: "",
+      troops: [],
       form: {
         name: "",
-        avatar: "",
-        passwd: "",
-        role_id: null,
-        is_super_admin: 0,
-        is_admin: 1,
-        is_enable: 1,
-        sys_id: null,
+        ip: "",
+        sys_id: "",
+        home_url: "",
+        standby_time: 0,
+        banner_interval: 0,
+        background_url: ""
       },
       rules: {
         name: [
           { required: true, message: "请输入支队名称", trigger: "blur" },
           { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
         ],
-        passwd: [
-          { required: true, message: "请输入管理员密码", trigger: "blur" }
+        ip: [
+          { required: true, message: "请输入 IP 地址段", trigger: "blur" }
         ],
-        sys_id: [
-          { required: true, message: "请选择支队", trigger: "blur" }
+        home_url: [
+          { required: true, message: "请输入主页链接", trigger: "blur" }
+        ],
+        banner_interval: [
+          { required: true, message: "请输入轮播图播放时长，时间为秒", trigger: "blur" }
+        ],
+        standby_time: [
+          { required: true, message: "请输入待机时长，时间为秒", trigger: "blur" }
         ]
       },
       fits: ["fill"],
@@ -173,26 +165,11 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          if (this.isSuperAdmin) {
-            this.form.is_super_admin = 1
-          } else {
-            this.form.is_super_admin = 0
-          }
-          if (this.isAdmin) {
-            this.form.is_admin = 1
-          } else {
-            this.form.is_admin = 0
-          }
-          if (this.isEnable) {
-            this.form.is_enable = 1
-          } else {
-            this.form.is_enable = 0
-          }
-          this.form.role_id = this.form.id;
+          this.form.sys_id = this.form.id;
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "role/update",
+              url: this.$global_msg.host + "troop/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),
@@ -201,39 +178,36 @@ export default {
             })
             .then(
               resp => {
-                console.log("role/update: ", resp);
+                // console.log(resp);
                 if (resp.status == 200 && resp.data.statusCode == 1) {
                   this.$notify({
                     title: "成功",
-                    message: "修改成功",
+                    message: "更新成功",
                     type: "success"
                   });
-                  this.$router.push({ name: "role" });
+                  this.$router.push("/troop");
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: "更新失败"
                   });
                 }
               },
               error => {
                 this.$notify.error({
                   title: "失败",
-                  message: "连接服务器失败"
+                  message: "更新失败"
                 });
               }
             );
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: "请检查表单数据是否正确"
-          });
+          console.log("error submit!!");
           return false;
         }
       });
+      // console.log(this.form);
     },
     handleChange(file, fileList) {
-      console.log("handleChange: ", file);
       this.imageFile = file.raw;
       if (file.status === "success") {
         console.log("OK");
@@ -247,19 +221,17 @@ export default {
     handleSuccess(res) {
       console.log("handleSuccess: ", res);
       this.$message.success("图片上传成功");
-      this.form.avatar = res.data.data[0].pic_url; //我添加
+      this.form.background_url = res.data.data[0].pic_url;
     },
-    handleRemove(file, fileList) {;
-      console.log("handleRemove: ", file);
+    handleRemove(file) {
+      console.log(file);
     },
 
     handleExceed(files, fileList) {
-      console.log("handleExceed: ", files, fileList);
       this.$message.warning(`当前限制选择 1 个文件`);
     },
 
     handlePictureCardPreview(file) {
-      console.log("handlePictureCardPreview: ", file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
@@ -274,12 +246,8 @@ export default {
 .box {
   display: flex;
   justify-content: space-between;
-  text-align: left;
   .avator {
     margin-left: 30px;
-  };
-  .el-submit {
-    margin-left: 200px;
   }
 }
 </style>

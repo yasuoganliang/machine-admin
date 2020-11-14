@@ -12,7 +12,7 @@
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="200px"
+          label-width="300px"
           size="mini"
           :inline="true"
         >

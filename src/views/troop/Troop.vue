@@ -12,7 +12,7 @@
     >
       <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
       <el-table-column prop="name" label="支队名称"></el-table-column>
-      <el-table-column prop="ip" label="IP网段" width="105"></el-table-column>
+      <!-- <el-table-column prop="ip" label="IP网段" width="105"></el-table-column> -->
       <el-table-column prop="home_url" label="首页链接"></el-table-column>
       <el-table-column prop="background_url" label="背景图片">
         <template   slot-scope="scope">
@@ -25,7 +25,7 @@
         <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
       </el-table-column>
       <el-table-column label="操作" width="120">
-        <template slot-scope="scope">
+        <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
           <el-button @click="handleClick(1, scope.row)" type="text" size="small">删除</el-button>
         </template>
@@ -94,8 +94,16 @@ export default {
     //操作栏处理函数
     handleClick(i, row) {
       if (i == 1) {
-        this.delTroop(row.id);
-        this.reload();
+        const that = this;
+        axios
+        .delete(this.$global_msg.host + "troop/del?sys_id=" + row.id, {
+          headers: {
+            token: sessionStorage.getItem("token")
+          }
+        })
+        .then(resp => {
+          that.reload();
+        });
       }
       if (i == 2) {
         // console.log("row.id: ", row.id);
@@ -103,17 +111,6 @@ export default {
       }
     },
     handleSelectionChange() {},
-    delTroop(id) {
-      axios
-        .delete(this.$global_msg.host + "troop/del?sys_id=" + id, {
-          headers: {
-            token: sessionStorage.getItem("token")
-          }
-        })
-        .then(resp => {
-          
-        });
-    },
     filterTag() {},
     //点击每个表格栏
     click(row, column, cell, event) {

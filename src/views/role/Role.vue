@@ -28,7 +28,7 @@
         <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
       </el-table-column>
       <el-table-column label="操作" width="120">
-        <template slot-scope="scope">
+        <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
           <el-button @click="handleClick(1, scope.row)" type="text" size="small">删除</el-button>
         </template>
@@ -98,8 +98,15 @@ export default {
     //操作栏处理函数
     handleClick(i, row) {
       if (i == 1) {
-        this.delTroop(row.id);
-        this.reload();
+        const that = this;
+        axios
+        .delete(this.$global_msg.host + "role/del?role_id=" + row.id, {
+          headers: {
+            token: sessionStorage.getItem("token")
+          }
+        }).then(resp => {
+          that.reload();
+        });
       }
       if (i == 2) {
         // console.log("row.id: ", row.id);
@@ -107,21 +114,9 @@ export default {
       }
     },
     handleSelectionChange() {},
-    delTroop(id) {
-      axios
-        .delete(this.$global_msg.host + "role/del?role_id=" + id, {
-          headers: {
-            token: sessionStorage.getItem("token")
-          }
-        })
-        .then(resp => {
-          
-        });
-    },
     filterTag() {},
     //点击每个表格栏
     click(row, column, cell, event) {
-      // alert("ddd");
       console.log(row);
     },
     currentChange(current) {
