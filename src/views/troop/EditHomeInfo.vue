@@ -96,20 +96,17 @@ export default {
       }
     }
 
-    // 获取用户信息
-    console.log("this.$route.params.id: ", this.$route.params);
-    if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}troop/get-info-by-id?sys_id=${this.$route.params.id}`
-      axios
-        .get(url, headers)
-        .then(resp => {
-          // console.log(resp);
-          this.form = resp.data.data.troopInfo;
-          this.upload = resp.data.data.troopInfo.background_url
-          this.originUrl = resp.data.data.troopInfo.background_url
-          // console.log(this.form);
-        });
-    }
+    
+    let url = `${this.$global_msg.host}troop/get-info-by-id?sys_id=${sessionStorage.getItem("sys_id")}`
+    axios
+      .get(url, headers)
+      .then(resp => {
+        // console.log(resp);
+        this.form = resp.data.troopInfo;
+        this.upload = resp.data.troopInfo.background_url
+        this.originUrl = resp.data.troopInfo.background_url
+        // console.log(this.form);
+      });
   },
   data() {
     return {
@@ -179,13 +176,13 @@ export default {
             .then(
               resp => {
                 // console.log(resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "更新成功",
                     type: "success"
                   });
-                  this.$router.push("/troop");
+                  // this.$router.push("/troop");
                 } else {
                   this.$notify.error({
                     title: "失败",

@@ -55,7 +55,7 @@ export default {
         .get(url, headers)
         .then(resp => {
           // console.log(resp);
-          this.form = resp.data.data.roleInfo;
+          this.form = resp.data.roleInfo;
           // console.log(this.form);
         });
     }

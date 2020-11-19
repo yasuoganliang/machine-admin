@@ -17,11 +17,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/welcome/Welcome')
       },
       {
-        path: '/user',
-        name: 'user',
-        component: () => import('../views/employee/User')
-      },
-      {
         // 支队信息列表
         path: '/troop',
         name: 'troop',
@@ -90,6 +85,22 @@ const routes = [
         component: () => import('../views/person/PersonInfo.vue')
       },
       {
+        // 官兵信息列表
+        path: '/officer',
+        name: 'officer',
+        component: () => import('../views/officer/Officer')
+      },
+      {
+        path: '/officerAdd',
+        name: 'officerAdd',
+        component: () => import('../views/officer/OfficerAdd.vue')
+      },
+      {
+        path: '/officerEdit/:id',
+        name: 'officerEdit',
+        component: () => import('../views/officer/OfficerEdit.vue')
+      },
+      {
         // 视频列表
         path: '/video',
         name: 'video',
@@ -153,9 +164,20 @@ const routes = [
         component: () => import('../views/banner/BannerInfo.vue')
       },
       {
-        path: '/job',
-        name: 'job',
-        component: () => import('../views/job/job.vue')
+        // 幻灯片列表
+        path: '/ipaddr',
+        name: 'ipaddr',
+        component: () => import('../views/ipaddr/Ipaddr')
+      },
+      {
+        path: '/ipaddrAdd',
+        name: 'ipaddrAdd',
+        component: () => import('../views/ipaddr/IpaddrAdd.vue')
+      },
+      {
+        path: '/ipaddrEdit/:id',
+        name: 'ipaddrEdit',
+        component: () => import('../views/ipaddr/IpaddrEdit.vue')
       },
       {
         // 关于应用页面
@@ -164,45 +186,10 @@ const routes = [
         component: () => import('../views/about/About.vue')
       },
       {
-        // 用户信息页面
-        path: '/userInfo/:id',
-        name: 'userInfo',
-        component: () => import('../views/employee/UserInfo.vue')
-      },
-      {
-        // 增加员工页面
-        path: '/userAdd',
-        name: 'userAdd',
-        component: () => import('../views/employee/UserAdd.vue')
-      },
-      {
-        // 编辑用户信息页面
-        path: '/userEdit/:id',
-        name: 'userEdit',
-        component: () => import('../views/employee/UserEdit.vue')
-      },
-      {
         // 编辑个人基本信息页面
         path: '/editMe/:id',
         name: 'editMe',
         component: () => import('../views/personnel/UserEdit2.vue')
-      },
-      {
-        // 部门列表
-        path: '/deptlist',
-        name: 'deptlist',
-        component: () => import('../views/department/Department.vue')
-      },
-      {
-        // 添加部门
-        path: '/addDept',
-        name: 'addDept',
-        component: () => import('../views/department/Add.vue')
-      },
-      {
-        path: '/personnelList',
-        name: 'personnelList',
-        component: () => import('../views/personnel/List.vue')
       }
     ]
   },

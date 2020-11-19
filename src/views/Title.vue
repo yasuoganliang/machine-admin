@@ -35,8 +35,8 @@
           <i class="el-icon-caret-bottom"></i>
         </span>
         <el-dropdown-menu slot="dropdown" style="top: 40px" size="mini">
-          <el-dropdown-item disabled>用户菜单</el-dropdown-item>
-          <el-dropdown-item command="a">个人信息</el-dropdown-item>
+          <!-- <el-dropdown-item disabled>用户菜单</el-dropdown-item>
+          <el-dropdown-item command="a">个人信息</el-dropdown-item> -->
           <el-dropdown-item command="b">关于</el-dropdown-item>
           <el-dropdown-item divided command="d">注销</el-dropdown-item>
         </el-dropdown-menu>
@@ -67,9 +67,9 @@ export default {
     handleCommand(command) {
       console.log("111");
       switch (command) {
-        case "a":
-          this.$router.push({ name: "userInfo", params: { id: this.adminId } });
-          break;
+        // case "a":
+        //   this.$router.push({ name: "userInfo", params: { id: this.adminId } });
+        //   break;
         case "b":
           this.$router.push({ name: "about" });
           break;

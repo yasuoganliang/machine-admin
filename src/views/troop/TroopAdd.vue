@@ -140,7 +140,7 @@ export default {
             .then(
               resp => {
                 console.log("troop/add: ", resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "添加成功",
@@ -150,7 +150,7 @@ export default {
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },
@@ -185,7 +185,7 @@ export default {
     handleSuccess(res) {
       console.log("handleSuccess: ", res);
       this.$message.success("图片上传成功");
-      this.form.background_url = res.data.data[0].pic_url; //我添加
+      this.form.background_url = res.data.data[0].pic_url;
     },
     handleRemove(file, fileList) {;
       console.log("handleRemove: ", file);

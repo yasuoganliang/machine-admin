@@ -104,9 +104,9 @@ export default {
         .get(url, headers)
         .then(resp => {
           // console.log(resp);
-          this.form = resp.data.data.troopInfo;
-          this.upload = resp.data.data.troopInfo.background_url
-          this.originUrl = resp.data.data.troopInfo.background_url
+          this.form = resp.data.troopInfo;
+          this.upload = resp.data.troopInfo.background_url
+          this.originUrl = resp.data.troopInfo.background_url
           // console.log(this.form);
         });
     }
@@ -178,8 +178,8 @@ export default {
             })
             .then(
               resp => {
-                // console.log(resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                console.log(resp);
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "更新成功",

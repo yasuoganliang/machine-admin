@@ -6,72 +6,70 @@
       text-color="#5C5C5C"
       active-text-color="#000000"
     >
-      <el-menu-item index="2" @click="openPage(9)">
+      <el-menu-item index="1" @click="openPage(9)">
         <i class="el-icon-eleme iconfont icon-panel"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <el-submenu index="1" v-if="this.isSuper">
-        <template slot="title">
-          <i class="el-icon-user iconfont icon-yuangongguanli"></i>支队管理
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1" @click="openPage(11)">支队列表</el-menu-item>
-          <el-menu-item index="1-2" @click="openPage(12)">增加支队</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
       <el-submenu index="2" v-if="this.isSuper">
         <template slot="title">
-          <i class="el-icon-tickets iconfont icon-personnel-file"></i>支队管理员
+          <i class="el-icon-user iconfont icon-bumen"></i>支队管理
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1" @click="openPage(13)">管理员列表</el-menu-item>
-          <el-menu-item index="2-1" @click="openPage(14)">增加管理员</el-menu-item>
+          <el-menu-item index="2-1" @click="openPage(11)">支队列表</el-menu-item>
+          <el-menu-item index="2-2" @click="openPage(12)">增加支队</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="3">
+      <el-submenu index="3" v-if="this.isSuper">
         <template slot="title">
-          <i class="el-icon-menu el-icon-user iconfont icon-bumen"></i>网上荣誉室
+          <i class="el-icon-tickets iconfont icon-zengjiayonghu"></i>支队管理员
         </template>
         <el-menu-item-group>
-          <el-menu-item index="3-1" @click="openPage(7)">修改主页链接</el-menu-item>
+          <el-menu-item index="3-1" @click="openPage(13)">管理员列表</el-menu-item>
+          <el-menu-item index="3-1" @click="openPage(14)">增加管理员</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>红色家谱</template>
+          <i class="el-icon-user iconfont icon-shezhi"></i>系统管理</template>
         <el-menu-item-group>
-          <el-menu-item index="4-1" @click="openPage(6)">家谱列表</el-menu-item>
-          <el-menu-item index="4-2" @click="openPage(5)">增加成员</el-menu-item>
+          <el-menu-item index="4-1" @click="openPage(7)">编辑系统信息</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <el-menu-item index="4-2" @click="openPage(21)">幻灯片</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <el-menu-item index="4-3" @click="openPage(10)">IP 地址</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="5">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>红色记忆
-        </template>
+          <i class="el-icon-setting iconfont icon-yuangongliebiao"></i>红色家谱</template>
         <el-menu-item-group>
-          <el-menu-item index="5-1" @click="openPage(6)">视频列表</el-menu-item>
-          <el-menu-item index="5-2" @click="openPage(5)"
-            >增加视频</el-menu-item
-          >
+          <el-menu-item index="4-1" @click="openPage(15)">官兵列表</el-menu-item>
+          <el-menu-item index="4-1" @click="openPage(16)">主官列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="6">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>强军风采
-        </template>
+          <i class="el-icon-setting iconfont icon-zuidahua"></i>红色记忆</template>
         <el-menu-item-group>
-          <el-menu-item index="6-1" @click="openPage(6)">个人事迹列表</el-menu-item>
-          <el-menu-item index="6-2" @click="openPage(5)"
-            >增加个人事迹</el-menu-item
-          >
+          <el-menu-item index="6-1" @click="openPage(17)">视频列表</el-menu-item>
+          <el-menu-item index="6-2" @click="openPage(18)">增加视频</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="7">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-wode"></i>个人信息</template>
+          <i class="el-icon-setting iconfont icon-yuangongguanli"></i>强军风采</template>
         <el-menu-item-group>
-          <el-menu-item index="7-1" @click="openPage(8)">修改个人信息</el-menu-item
-          >
+          <el-menu-item index="7-1" @click="openPage(19)">个人事迹列表</el-menu-item>
+          <el-menu-item index="7-2" @click="openPage(20)">增加个人事迹</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+      <el-submenu index="8">
+        <template slot="title">
+          <i class="el-icon-user iconfont icon-wode"></i>个人信息</template>
+        <el-menu-item-group>
+          <el-menu-item index="8-1" @click="openPage(8)">修改个人信息</el-menu-item>
           <!-- <el-menu-item index="3-2">选项2</el-menu-item> -->
         </el-menu-item-group>
       </el-submenu>
@@ -87,17 +85,14 @@ export default {
   methods: {
     openPage(i) {
       switch (i) {
-        case 1:
-          this.$router.push("/user");
-          break;
         case 3:
           this.$router.push("/about");
           break;
         case 5:
-          this.$router.push("/userAdd");
+          this.$router.push("/troopEdit");
           break;
         case 6:
-          this.$router.push("/deptlist");
+          this.$router.push("/person");
           break;
         case 7:
           this.$router.push("/editHomeInfo");
@@ -109,7 +104,7 @@ export default {
           this.$router.push("/welcome");
           break;
         case 10:
-          this.$router.push("/addDept");
+          this.$router.push("/ipaddr");
           break;
         case 11:
           this.$router.push("/troop");
@@ -127,7 +122,7 @@ export default {
           this.$router.push("/person");
           break;
         case 16:
-          this.$router.push("/personAdd");
+          this.$router.push("/officer");
           break;
         case 17:
           this.$router.push("/video");

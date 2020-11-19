@@ -1,7 +1,7 @@
 <template>
-  <div class="troopEdit">
+  <div class="storyEdit">
     <div>
-      <span>新增支队</span>
+      <span>添加个人事迹</span>
       <el-divider></el-divider>
     </div>
 
@@ -12,87 +12,49 @@
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="200px"
-          size="mini"
+          size="medium"
           :inline="true"
+          label-width="200px"
         >
-          <el-form-item label="名称" prop="name">
+          <el-form-item label="姓名" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="IP 地址段" prop="ip">
-            <el-input v-model="form.ip"></el-input>
+          <br />
+          <el-form-item label="简介" prop="brief">
+            <el-input type="textarea"  v-model="form.brief" style="width: 500px;"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="首页链接" prop="home_url">
-            <el-input v-model="form.home_url"></el-input>
-          </el-form-item>
-          <el-form-item label="待机时长" prop="standby_time">
-            <el-input v-model="form.standby_time"></el-input>
+          <el-form-item label="详情" prop="details">
+            <el-input type="textarea" v-model="form.details" style="width: 500px;"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
-            <el-input v-model="form.banner_interval"></el-input>
+          <el-form-item label="备注" prop="remark">
+            <el-input  type="textarea" v-model="form.remark" ></el-input>
           </el-form-item>
-          <el-form-item label="背景图片">
-            <img
-              :src="form.background_url"
-              style="border-radius: 5%"
-              alt="原图"
-              width="146px"
-              height="146px"
-              fit="cover"
-            />
-          </el-form-item>
-          <el-form-item label="背景图片上传">
+          <br />
+          <el-form-item label="图片上传"  prop="pic_url">
             <el-upload
-              :multiple="true"
-              :file-list="fileList"
               :action="uploadUrl"
-              :limit="5"
-              :on-change="handleChange"
-              ref="upload"
               list-type="picture-card"
               :on-exceed="handleExceed"
               :on-success="handleSuccess"
               :on-error="handleError"
-              accept=".jpg, .jpeg, .png, .gif, .bmp, .pdf, .JPG, .JPEG, .PBG, .GIF, .BMP, .PDF"
-              :auto-upload="false"
-            >
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
+              :on-change="handleChange"
+              ref="upload"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove">
+              <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible_2">
-              <img width="100%" :src="dialogImageUrl" alt />
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
           </el-form-item>
-          <el-form-item>
+          <br />
+          <el-form-item class="el-submit">
             <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
+          <br />
         </el-form>
       </div>
     </div>
@@ -106,19 +68,12 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic`
-    // axios.get(this.$global_msg.host + "troop/edit-info", {
-    //   headers: {
-    //     token: sessionStorage.getItem("token")
-    //   }
-    // }).then(resp => {
-    //   console.log("troop/edit-info: ", resp);
-    //   this.form = resp.data.data.troopEditInfo;
-    //   this.upload = resp.data.data.troopEditInfo.background_url
-    // });
+    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`
   },
+  inject:['reload'],
   data() {
     return {
+      dialogVisible: false,
       dialogImageUrl: "",
       dialogVisible_2: false,
       oldImg: false,
@@ -128,30 +83,22 @@ export default {
       ruleForm: {},
       upload: "",
       form: {
-        name: "",
-        ip: "",
-        home_url: "",
-        standby_time: 0,
-        banner_interval: 0,
-        background_url: ""
+        name: '',
+        brief: '',
+        details: '',
+        remark: '',
+        pic_url: '',
       },
       rules: {
         name: [
-          { required: true, message: "请输入支队名称", trigger: "blur" },
-          { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
+          { required: true, message: "请输入姓名", trigger: "blur" },
         ],
-        ip: [
-          { required: true, message: "请输入 IP 地址段", trigger: "blur" }
+        brief: [
+          { required: true, message: "请输入个人事迹简介", trigger: "blur" }
         ],
-        home_url: [
-          { required: true, message: "请输入主页链接", trigger: "blur" }
+        details: [
+          { required: true, message: "请输入个人事迹详情", trigger: "blur" }
         ],
-        banner_interval: [
-          { required: true, message: "请输入轮播图播放时长，时间为秒", trigger: "blur" }
-        ],
-        standby_time: [
-          { required: true, message: "请输入待机时长，时间为秒", trigger: "blur" }
-        ]
       },
       fits: ["fill"],
     };
@@ -161,7 +108,7 @@ export default {
       console.info(res.data);
       this.$message.success("添加成功");
       this.ruleForm = {};
-      this.$router.push("/troop");
+      this.$router.push("/story");
     },
     reset(form) {
       this.$refs[form].resetFields();
@@ -172,29 +119,28 @@ export default {
         if (valid) {
           axios
             .request({
-              headers: {
-                token: sessionStorage.getItem("token")
-              },
               method: "post",
-              url: this.$global_msg.host + "troop/add",
+              url: this.$global_msg.host + "story/add",
               data: this.form,
               headers: {
+                "token": sessionStorage.getItem("token"),
                 "Content-Type": "application/json;charset=UTF-8"
               }
             })
             .then(
               resp => {
-                console.log(resp);
-                if (resp.data.code == 200) {
+                console.log("story/add: ", resp);
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
-                    message: "插入成功了",
+                    message: "添加成功",
                     type: "success"
                   });
+                  this.$router.push({ name: "story" });
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },
@@ -213,9 +159,9 @@ export default {
           return false;
         }
       });
-      console.log(this.form);
     },
     handleChange(file, fileList) {
+      console.log("handleChange: ", file);
       this.imageFile = file.raw;
       if (file.status === "success") {
         console.log("OK");
@@ -229,19 +175,21 @@ export default {
     handleSuccess(res) {
       console.log("handleSuccess: ", res);
       this.$message.success("图片上传成功");
-      this.currentGoods.imgSrc = "服务器返回的路径"; //我添加
+      this.form.pic_url = res.data.data[0].pic_url;
     },
-    handleRemove(file) {
-      console.log(file);
+    handleRemove(file, fileList) {;
+      console.log("handleRemove: ", file);
     },
 
     handleExceed(files, fileList) {
+      console.log("handleExceed: ", files, fileList);
       this.$message.warning(`当前限制选择 1 个文件`);
     },
 
     handlePictureCardPreview(file) {
+      console.log("handlePictureCardPreview: ", file);
       this.dialogImageUrl = file.url;
-      this.dialogVisible_2 = true;
+      this.dialogVisible = true;
     },
     handleDownload(file) {
       console.log(file);
@@ -254,8 +202,10 @@ export default {
 .box {
   display: flex;
   justify-content: space-between;
-  .avator {
-    margin-left: 30px;
+  text-align: left;
+  .el-submit {
+    margin-left: 200px;
   }
 }
+
 </style>

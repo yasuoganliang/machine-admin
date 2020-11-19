@@ -104,7 +104,7 @@ export default {
     }
     axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
       console.log("resp: ", resp);
-      this.troops = resp.data.data.troopList;
+      this.troops = resp.data.troopList;
     });
      // 获取用户信息
     console.log("this.$route.params.id: ", this.$route.params);
@@ -114,7 +114,7 @@ export default {
         .get(url, headers)
         .then(resp => {
           // console.log(resp);
-          this.form = resp.data.data.roleInfo;
+          this.form = resp.data.roleInfo;
           // console.log(this.form);
         });
     }
@@ -202,7 +202,7 @@ export default {
             .then(
               resp => {
                 console.log("role/update: ", resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "修改成功",

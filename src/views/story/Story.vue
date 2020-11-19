@@ -1,7 +1,7 @@
 <template>
-  <div id="userList">
+  <div id="storyList">
     <el-table
-      ref="multipleTable"
+      ref="singleTable"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
@@ -10,25 +10,21 @@
       v-loading="loading"
       size="mini"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
-      <el-table-column prop="name" label="支队名称"></el-table-column>
-      <el-table-column prop="ip" label="IP网段" width="105"></el-table-column>
-      <el-table-column prop="home_url" label="首页链接"></el-table-column>
-      <el-table-column prop="background_url" label="背景图片">
+      <el-table-column prop="id" label="ID" width="65"></el-table-column>
+      <el-table-column prop="name" label="姓名"></el-table-column>
+      <!-- <el-table-column prop="ip" label="IP网段" width="105"></el-table-column> -->
+      <el-table-column prop="pic_url" label="图片">
         <template   slot-scope="scope">
-          <img :src="scope.row.background_url"  min-width="220" height="70" />
+          <img :src="scope.row.pic_url"  min-width="220" height="70" />
         </template>
       </el-table-column>
-      <el-table-column prop="standby_time" label="待机时长（秒）"></el-table-column>
-      <el-table-column prop="banner_interval" label="图片幻灯片播放时长"></el-table-column>
-      <el-table-column prop="is_enable" label="是否启用"  width="75">
-        <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
-      </el-table-column>
-      <el-table-column label="操作" width="60">
-        <template slot-scope="scope">
-          <!-- <el-button @click="handleClick(1, scope.row)" type="text" size="small">查看</el-button> -->
+      <el-table-column prop="brief" label="简介"></el-table-column>
+      <el-table-column prop="details" label="详情"></el-table-column>
+      <el-table-column prop="remark" label="备注"></el-table-column>
+      <el-table-column label="操作" width="120">
+        <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
+          <el-button @click="handleClick(1, scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,6 +48,7 @@ import axios from "axios";
 import { mapMutations, mapState } from "vuex";
 export default {
   computed: mapState(["isSuper"]),
+  inject:['reload'],
   data() {
     return {
       tableData: [],
@@ -74,7 +71,7 @@ export default {
     // 分页查询
     troopList() {
       axios
-        .get(this.$global_msg.host + "troop/list", {
+        .get(this.$global_msg.host + "story/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -84,21 +81,27 @@ export default {
           }
         })
         .then(resp => {
-          console.log("resp: ", resp);
-          this.tableData = resp.data.data.troopList;
-          this.current = resp.data.data.current;
-          this.size = resp.data.data.size;
-          this.total = resp.data.data.total;
+          console.log("resp: ", resp.data);
+          this.tableData = resp.data.storyList;
         });
     },
     //操作栏处理函数
     handleClick(i, row) {
-      console.log("handleClick: ", row);
       if (i == 1) {
-        this.$router.push({ path: "/troopInfo", params: { id: row.id } });
+        const that = this;
+        axios
+        .delete(this.$global_msg.host + "story/del?story_id=" + row.id, {
+          headers: {
+            token: sessionStorage.getItem("token")
+          }
+        })
+        .then(resp => {
+          that.reload();
+        });
       }
       if (i == 2) {
-        this.$router.push({ path: "/troopEdit/:id", params: { id: row.id } });
+        // console.log("row.id: ", row.id);
+        this.$router.push({ name: "storyEdit", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},

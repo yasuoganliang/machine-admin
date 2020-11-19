@@ -12,22 +12,22 @@
     >
       <el-table-column prop="id" label="管理员ID" width="75"></el-table-column>
       <el-table-column prop="name" label="管理员名称"></el-table-column>
-      <el-table-column prop="avatar" label="头像">
+      <!-- <el-table-column prop="avatar" label="头像">
         <template   slot-scope="scope">
           <img :src="scope.row.avatar"  min-width="220" height="70" />
         </template>
-      </el-table-column>
-      <el-table-column prop="troop_name" label="所属支队"  width="95"></el-table-column>
-      <el-table-column prop="is_super_admin" label="超级管理员"  width="95">
+      </el-table-column> -->
+      <el-table-column prop="troop_name" label="所属支队"></el-table-column>
+      <el-table-column prop="is_super_admin" label="超级管理员">
         <template slot-scope="scope">{{ scope.row.is_super_admin == 1 ? '是': '否' }}</template>
       </el-table-column>
-      <el-table-column prop="is_super_admin" label="管理员"  width="95">
+      <el-table-column prop="is_super_admin" label="管理员">
         <template slot-scope="scope">{{ scope.row.is_super_admin == 1 ? '是': '否' }}</template>
       </el-table-column>
-      <el-table-column prop="is_enable" label="是否启用"  width="75">
+      <el-table-column prop="is_enable" label="是否启用">
         <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="120">
+      <el-table-column label="操作">
         <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
           <el-button @click="handleClick(1, scope.row)" type="text" size="small">删除</el-button>
@@ -89,10 +89,10 @@ export default {
         })
         .then(resp => {
           console.log("resp: ", resp);
-          this.tableData = resp.data.data.roleList;
-          this.current = resp.data.data.current;
-          this.size = resp.data.data.size;
-          this.total = resp.data.data.total;
+          this.tableData = resp.data.roleList;
+          this.current = resp.data.current;
+          this.size = resp.data.size;
+          this.total = resp.data.total;
         });
     },
     //操作栏处理函数

@@ -15,12 +15,13 @@
           />
         </div>
         <div class="field">
-          <input
+          <el-input
             type="password"
             placeholder="用户密码"
             v-model="form.password"
             v-on:keyup.enter="submit"
-          />
+            show-password
+          ></el-input>
         </div>
         <div class="field">
           <input type="button" @click="submit" value="确认" />
@@ -148,27 +149,25 @@ export default {
           data: params,
         })
           .then((res) => {
-            // console.log("res: ", res.status);
-            // console.log("login data: ", res.data.data);
-            if (res.status == 200 && res.data.statusCode == 1) {
+            console.log("res: ", res);
+            console.log("login data: ", res.statusCode);
+            if (res.statusCode == 1) {
               let user = {
-                token: res.data.data.token,
-                name: res.data.data.adminInfo.name,
-                id: res.data.data.adminInfo.id,
-                sys_id: res.data.data.adminInfo.sys_id,
-                isSuper: res.data.data.adminInfo.isSuper,
-                avatar_url: res.data.data.adminInfo.avatar || null,
+                token: res.data.token,
+                name: res.data.adminInfo.name,
+                id: res.data.adminInfo.id,
+                sys_id: res.data.adminInfo.sys_id,
+                isSuper: res.data.adminInfo.isSuper,
+                avatar_url: res.data.adminInfo.avatar || null,
               };
               // console.log("user: ", user);
               _this.changeLogin(user);
               // console.log("success login");
               _this.$router.push("/");
             } else if (res.status == 404) {
-              this.$message.error("status 404: ", res.data.msg);
+              this.$message.error("status 404: ", res.message);
             } else {
-              this.$message.error(
-                `status ${res.status}: `,
-                res.data.data.message
+              this.$message.error(`status ${res.status}: `,res.message
               );
             }
           })

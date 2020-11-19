@@ -1,5 +1,13 @@
 <template>
-  <div id="troopList">
+  <div id="bannerList">
+    <div class="box-header">
+      <div>
+        <span>IP 列表</span>
+      </div>
+      <div>
+        <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"  @click="jumpTo()">添加</el-button>
+      </div>
+    </div>
     <el-table
       ref="singleTable"
       :data="tableData"
@@ -10,20 +18,9 @@
       v-loading="loading"
       size="mini"
     >
-      <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
-      <el-table-column prop="name" label="支队名称"></el-table-column>
-      <!-- <el-table-column prop="ip" label="IP网段" width="105"></el-table-column> -->
-      <el-table-column prop="home_url" label="首页链接"></el-table-column>
-      <el-table-column prop="background_url" label="背景图片">
-        <template   slot-scope="scope">
-          <img :src="scope.row.background_url"  min-width="220" height="70" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="standby_time" label="待机时长（秒）"></el-table-column>
-      <el-table-column prop="banner_interval" label="图片幻灯片播放时长（秒）"></el-table-column>
-      <el-table-column prop="is_enable" label="是否启用"  width="75">
-        <template slot-scope="scope">{{ scope.row.is_enable == 1 ? '是': '否' }}</template>
-      </el-table-column>
+      <el-table-column prop="id" label="ID" width="65"></el-table-column>
+      <el-table-column prop="ipv4" label="ipv4 地址"></el-table-column>
+      <el-table-column prop="mac" label="MAC 地址"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
@@ -68,13 +65,13 @@ export default {
   },
   created() {
     // 声命周期钩子函数
-    this.troopList();
+    this.bannerList();
   },
   methods: {
     // 分页查询
-    troopList() {
+    bannerList() {
       axios
-        .get(this.$global_msg.host + "troop/list", {
+        .get(this.$global_msg.host + "ipaddr/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -84,19 +81,20 @@ export default {
           }
         })
         .then(resp => {
-          console.log("resp: ", resp.data);
-          this.tableData = resp.data.troopList;
-          this.current = resp.data.current;
-          this.size = resp.data.size;
-          this.total = resp.data.total;
+          console.log("resp: ", resp);
+          this.tableData = resp.data.ipaddrList;
         });
+    },
+    jumpTo() {
+      this.$router.push({ path: "/ipaddrAdd" });
     },
     //操作栏处理函数
     handleClick(i, row) {
+      console.log("handleClick: ", row);
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "troop/del?sys_id=" + row.id, {
+        .delete(this.$global_msg.host + "ipaddr/del?ip_id=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }
@@ -106,8 +104,7 @@ export default {
         });
       }
       if (i == 2) {
-        // console.log("row.id: ", row.id);
-        this.$router.push({ name: "troopEdit", params: { id: row.id } });
+        this.$router.push({ name: "ipaddrEdit", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},
@@ -128,6 +125,16 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+#personList {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.box-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 .pagination {
   margin-top: 20px;
 }

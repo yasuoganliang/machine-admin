@@ -1,26 +1,26 @@
 <template>
-  <div class="userEdit">
+  <div class="ipaddrEdit">
     <div>
-      <span>新增部门</span>
+      <span>添加支队主机 IP 地址</span>
       <el-divider></el-divider>
     </div>
 
     <!-- 编辑表单 -->
     <div class="box">
       <div class="form">
-        <el-form ref="form" :model="form" :rules="rules" label-width="100px" size="mini">
-          <el-form-item label="部门名" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="经理员工号" prop="managerId">
-            <el-input v-model="form.managerId"></el-input>
+        <el-form
+          ref="form"
+          :model="form"
+          :rules="rules"
+          label-width="200px"
+          size="mini"
+          :inline="true"
+        >
+          <el-form-item label="ipv4 地址" prop="ip">
+            <el-input v-model="form.ip"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="简介" prop="description">
-            <el-input type="textarea" v-model="form.description"></el-input>
-          </el-form-item>
-          <br />
-          <el-form-item>
+          <el-form-item class="el-submit">
             <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
@@ -37,39 +37,19 @@ import axios from "axios";
 
 export default {
   created() {
-    // 声命周期钩子函数, 用于获取部门，工作，学历列表
-    axios.get(this.$global_msg.host + "employee/otherInfo").then(resp => {
-      console.log(resp);
-      this.jobs = resp.data.data.jobs;
-      this.departments = resp.data.data.departments;
-      this.eduLevels = resp.data.data.eduLevels;
-    });
+
   },
   data() {
     return {
       form: {
-        name: "",
-        managerId: null,
-        description: ""
+        ip: ''
       },
-      jobs: [],
-      departments: [],
-      eduLevels: [],
       rules: {
-        name: [
-          { required: true, message: "请输入部门名", trigger: "blur" },
-          { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
+        ip: [
+          { required: true, message: "请输入 ipv4 地址", trigger: "blur" },
         ],
-        managerId: [
-          { required: true, message: "请输入经理员工号", trigger: "blur" }
-        ],
-        description: [
-          { required: true, message: "请输入部门描述", trigger: "blur" }
-        ]
+        
       },
-      fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
     };
   },
   methods: {
@@ -83,25 +63,28 @@ export default {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "department/add",
+              url: this.$global_msg.host + "ipaddr/add",
               data: this.form,
               headers: {
+                "token": sessionStorage.getItem("token"),
                 "Content-Type": "application/json;charset=UTF-8"
               }
             })
+
             .then(
               resp => {
                 console.log(resp);
-                if (resp.data.code == 200) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
-                    message: "插入成功了",
+                    message: "添加成功",
                     type: "success"
                   });
+                  this.$router.push("/ipaddr");
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },
@@ -115,13 +98,13 @@ export default {
         } else {
           this.$notify.error({
             title: "失败",
-            message: "表单不合法"
+            message: "请检查表单数据是否正确"
           });
           return false;
         }
       });
       console.log(this.form);
-    }
+    },
   }
 };
 </script>
@@ -133,5 +116,23 @@ export default {
   .avator {
     margin-left: 30px;
   }
+  .el-submit {
+    margin-left: 200px;
+  }
+}
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>

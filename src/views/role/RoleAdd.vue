@@ -104,7 +104,7 @@ export default {
     }
     axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
       console.log("resp: ", resp);
-      this.troops = resp.data.data.troopList;
+      this.troops = resp.data.troopList;
     });
   },
   inject:['reload'],
@@ -188,7 +188,7 @@ export default {
             .then(
               resp => {
                 console.log("role/add: ", resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "添加成功",
@@ -198,7 +198,7 @@ export default {
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },
