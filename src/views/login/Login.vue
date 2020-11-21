@@ -1,6 +1,17 @@
 // 登录页面
 <template>
   <div class="box">
+    <el-dialog 
+      title="服务端IP和端口号" 
+      :visible.sync="dialogFormVisible" 
+      :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <el-input v-model="ipAndPort" autocomplete="off" placeholder="localhost:3000"></el-input>
+      <div slot="footer" class="dialog-footer">
+        <!-- <el-button @click="dialogFormVisible = false">取 消</el-button> -->
+        <el-button type="primary" @click="confirmChangeIp">确 定</el-button>
+      </div>
+    </el-dialog>
     <div class="left">
       <div class="form">
         <div>
@@ -63,19 +74,17 @@ const io = require("socket.io-client");
 
 export default {
   created() {
-    let data = {
-      token: '',
-      name: 'admin',
-      id: 1,
-      sys_id: 1,
-      isSuper: 1,
-      avatar_url: null,
-      clientType: 'admin'
+    let host = localStorage.getItem("serverHost")
+    if (!!host) {
+      this.dialogFormVisible = false;
+      this.$global_msg.host = host;
     }
-    this.initWebSocket(data);
   },
   data() {
     return {
+      screenshotStyle: '',
+      dialogFormVisible: true,
+      ipAndPort: '',
       form: {
         username: "",
         password: "",
@@ -85,6 +94,16 @@ export default {
     };
   },
   methods: {
+    confirmChangeIp () {
+      console.log("this.ipAndPort: ", this.ipAndPort);
+      if (!this.ipAndPort || this.ipAndPort.indexOf(':') === -1) {
+        this.$message.error("请输入合法的ip + 端口");
+        return
+      }
+      this.setServerHost(this.ipAndPort);
+      this.$global_msg["host"] = this.ipAndPort;
+      this.dialogFormVisible = false;
+    },
     initWebSocket(data) {
       const that = this;
       let socket = null;
@@ -113,7 +132,7 @@ export default {
       console.log("close");
       ipcRenderer.send("close");
     },
-    ...mapMutations(["changeLogin", "setWebsock"]),
+    ...mapMutations(["changeLogin", "setWebsock", "setServerHost"]),
     submit() {
       // var regex = /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
       if (this.form.username == "") {
@@ -256,5 +275,8 @@ export default {
   .right-body-content {
     margin-top: 20px;
   }
+}
+.el-button{
+  -webkit-app-region: no-drag;
 }
 </style>

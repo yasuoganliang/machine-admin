@@ -47,6 +47,7 @@ export default {
       let socket = this.$store.state.websock;
       console.log("socket: ", `ws:admin:${sessionStorage.getItem('sys_id')}`, socket);
       if (!!socket) {
+        socket.emit(`ws:admin:clientList`, 'getClientInfo');
         socket.on(`ws:admin:${sessionStorage.getItem('sys_id')}`, data => {
           console.log("data: ", data);
           this.tableData = data.clientList;

@@ -19,6 +19,7 @@ export default new Vuex.Store({
     avatar_url: sessionStorage.getItem('avatar') ? sessionStorage.getItem('avatar') : null,
     websock: sessionStorage.getItem('websock') ? sessionStorage.getItem('websock') : null,
     socket: null,//websocket对象
+    serverHost: null
   },
   mutations: {
     // 修改token，并将token存入localStorage
@@ -42,6 +43,12 @@ export default new Vuex.Store({
       // console.log(websock);
       state.websock = websock;
       sessionStorage.setItem('websock', websock);
+    },
+    // 修改token，并将token存入localStorage
+    setServerHost(state, serverHost) {
+      // console.log(websock);
+      state.serverHost = serverHost;
+      localStorage.setItem('serverHost', serverHost);
     }
   },
   actions: {

@@ -23,7 +23,9 @@ Vue.component(Map.name, Map);
 Vue.prototype.$store = store
 // 使用全局变量
 import global_msg from './global.js'   //注意文件路径，实际路径以项目目录结构为准
-Vue.prototype.$global_msg = global_msg;
+Vue.prototype.$global_msg = {
+  host: null
+};
 
 // 使用全局变量
 import getInterfaceInfo from './getInterfaceInfo.js'   //注意文件路径，实际路径以项目目录结构为准
