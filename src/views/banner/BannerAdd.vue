@@ -51,7 +51,7 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`;
+    this.uploadUrl = `${this.$global_msg.host}/common/update-pic?token=${sessionStorage.getItem("token")}`;
   },
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "banner/add",
+              url: this.$global_msg.host + "/banner/add",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

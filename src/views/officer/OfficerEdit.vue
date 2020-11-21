@@ -104,11 +104,11 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`;
+    this.uploadUrl = `${this.$global_msg.host}/common/update-pic?token=${sessionStorage.getItem("token")}`;
     console.log("this.$route.params.id: ", this.$route.params);
     this.labelList();
     if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}officer/get-by-id?officer_id=${this.$route.params.id}`
+      let url = `${this.$global_msg.host}/officer/get-by-id?officer_id=${this.$route.params.id}`
       let headers = {
         headers: {
           token: sessionStorage.getItem("token")
@@ -181,7 +181,7 @@ export default {
   methods: {
     labelList() {
       axios
-        .get(this.$global_msg.host + "label/list", {
+        .get(this.$global_msg.host + "/label/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -249,7 +249,7 @@ export default {
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "officer/update",
+              url: this.$global_msg.host + "/officer/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),
@@ -327,7 +327,7 @@ export default {
       axios
         .request({
           method: "delete",
-          url: this.$global_msg.host + "label/del",
+          url: this.$global_msg.host + "/label/del",
           data: {
             "label_id": label_id
           },
@@ -365,7 +365,7 @@ export default {
       axios
         .request({
           method: "post",
-          url: this.$global_msg.host + "label/add",
+          url: this.$global_msg.host + "/label/add",
           data: {
             "label_name": label_name
           },

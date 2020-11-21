@@ -89,7 +89,7 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}/common/update-pic?token=${sessionStorage.getItem("token")}`
     let headers = {
       headers: {
         token: sessionStorage.getItem("token")
@@ -97,7 +97,7 @@ export default {
     }
 
     
-    let url = `${this.$global_msg.host}troop/get-info-by-id?sys_id=${sessionStorage.getItem("sys_id")}`
+    let url = `${this.$global_msg.host}/troop/get-info-by-id?sys_id=${sessionStorage.getItem("sys_id")}`
     axios
       .get(url, headers)
       .then(resp => {
@@ -166,7 +166,7 @@ export default {
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "troop/update",
+              url: this.$global_msg.host + "/troop/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

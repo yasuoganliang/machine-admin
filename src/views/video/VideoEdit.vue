@@ -79,7 +79,7 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-video?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}/common/update-video?token=${sessionStorage.getItem("token")}`
     let headers = {
       headers: {
         token: sessionStorage.getItem("token")
@@ -88,7 +88,7 @@ export default {
     // 获取用户信息
     console.log("this.$route.params.id: ", this.$route.params);
     if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}video/get-by-id?video_id=${this.$route.params.id}`
+      let url = `${this.$global_msg.host}/video/get-by-id?video_id=${this.$route.params.id}`
       axios
         .get(url, headers)
         .then(resp => {
@@ -190,7 +190,7 @@ export default {
       axios
         .request({
           method: "post",
-          url: `${this.$global_msg.host}common/update-pic`,
+          url: `${this.$global_msg.host}/common/update-pic`,
           data: fd,
           headers: {
             "token": sessionStorage.getItem("token"),
@@ -242,7 +242,7 @@ export default {
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "video/update",
+              url: this.$global_msg.host + "/video/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

@@ -96,13 +96,13 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-pic?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}/common/update-pic?token=${sessionStorage.getItem("token")}`
     let headers = {
       headers: {
         token: sessionStorage.getItem("token")
       }
     }
-    axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
+    axios.get(this.$global_msg.host + "/troop/list", headers).then(resp => {
       console.log("resp: ", resp);
       this.troops = resp.data.troopList;
     });
@@ -178,7 +178,7 @@ export default {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "role/add",
+              url: this.$global_msg.host + "/role/add",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

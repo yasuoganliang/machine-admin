@@ -59,9 +59,20 @@
 import { mapMutations } from "vuex";
 import axios from "axios";
 const { ipcRenderer } = require("electron");
+const io = require("socket.io-client");
+
 export default {
   created() {
-    // this.initWebSocket();
+    let data = {
+      token: '',
+      name: 'admin',
+      id: 1,
+      sys_id: 1,
+      isSuper: 1,
+      avatar_url: null,
+      clientType: 'admin'
+    }
+    this.initWebSocket(data);
   },
   data() {
     return {
@@ -74,55 +85,29 @@ export default {
     };
   },
   methods: {
-    initWebSocket() {
+    initWebSocket(data) {
+      const that = this;
+      let socket = null;
       //初始化weosocket
-      console.log("初始化websocket");
-      const wsuri = this.$global_msg.socket_host + "websocket/admin/login"; //这个地址由后端童鞋提供
-      this.websock = new WebSocket(wsuri);
-      this.websock.onmessage = this.websocketonmessage;
-      this.websock.onopen = this.websocketonopen;
-      this.websock.onerror = this.websocketonerror;
-      this.websock.onclose = this.websocketclose;
-      this.setWebsock(this.websock);
-    },
-    websocketonopen() {
-      //连接建立之后执行send方法发送数据
-      console.log("建立连接成功");
-      this.websocketsend("hello");
-      this.ecode = true;
-    },
-    websocketonerror() {
-      //连接建立失败重连
-      this.initWebSocket();
-      this.error = false;
-    },
-    websocketonmessage(e) {
-      //数据接送
-      console.log("onmessage: ", e);
-      let data = JSON.parse(e.data);
-      if (data != null && data.type == "login") {
-        console.log(data);
-        let user = {
-          token: data.message.token,
-          id: data.message.userId,
-          super: data.message.isSuper,
-          avatar_url: data.message.avatar_url,
-        };
-        this.changeLogin(user);
-        console.log("aaa");
-        this.$router.push("/");
-      } else if (data.type == "error") {
-        this.$message.error(data.message);
+      // console.log("初始化websocket: ", that.$global_msg.host);
+      socket = io.connect(that.$global_msg.host);
+      // console.log("socket: ", socket);
+      if (!!socket) {
+        socket.emit("join", data);
+        socket.emit("ping-test", data);
+        socket.on("ping", data => {
+          console.log("ping data: ", data);
+        });
+
+        // 监听socket断开
+        socket.on("disconnect", async function (msg) {
+          console.log("socket 已断开:", msg);
+          // clearInterval(timer);
+          socket = null;
+          that.initWebSocket(data);
+        });
+        that.setWebsock(socket);
       }
-    },
-    websocketsend(Data) {
-      //数据发送
-      this.websock.send(Data);
-    },
-    websocketclose(e) {
-      //关闭连接
-      console.log("断开连接", e);
-      // this.initWebSocket();
     },
     close() {
       console.log("close");
@@ -145,12 +130,11 @@ export default {
         //踩坑了， axios 的post请求默认 提交的是 application/json, 而 springmvc 得接收post请求是 x-www-form-urlencoded
         axios({
           method: "POST",
-          url: this.$global_msg.host + "admin/login",
+          url: this.$global_msg.host + "/admin/login",
           data: params,
         })
           .then((res) => {
             console.log("res: ", res);
-            console.log("login data: ", res.statusCode);
             if (res.statusCode == 1) {
               let user = {
                 token: res.data.token,
@@ -162,13 +146,13 @@ export default {
               };
               // console.log("user: ", user);
               _this.changeLogin(user);
+              _this.initWebSocket({ ...user, clientType: "admin" });
               // console.log("success login");
               _this.$router.push("/");
             } else if (res.status == 404) {
               this.$message.error("status 404: ", res.message);
             } else {
-              this.$message.error(`status ${res.status}: `,res.message
-              );
+              this.$message.error(`status ${res.status}: `,res.message);
             }
           })
           .catch((err) => {

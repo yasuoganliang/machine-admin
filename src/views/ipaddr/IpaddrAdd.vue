@@ -63,7 +63,7 @@ export default {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "ipaddr/add",
+              url: this.$global_msg.host + "/ipaddr/add",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

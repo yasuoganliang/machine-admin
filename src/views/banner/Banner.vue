@@ -75,7 +75,7 @@ export default {
     // 分页查询
     bannerList() {
       axios
-        .get(this.$global_msg.host + "banner/list", {
+        .get(this.$global_msg.host + "/banner/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },

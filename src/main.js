@@ -14,6 +14,7 @@ import Map from 'v-charts/lib/map.common'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
+
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.component(Pie.name, Pie);
@@ -23,6 +24,10 @@ Vue.prototype.$store = store
 // 使用全局变量
 import global_msg from './global.js'   //注意文件路径，实际路径以项目目录结构为准
 Vue.prototype.$global_msg = global_msg;
+
+// 使用全局变量
+import getInterfaceInfo from './getInterfaceInfo.js'   //注意文件路径，实际路径以项目目录结构为准
+Vue.prototype.$local_host = getInterfaceInfo();
 
 // 接口错误拦截
 axios.interceptors.response.use(res => {

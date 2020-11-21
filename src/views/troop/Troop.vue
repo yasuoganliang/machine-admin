@@ -74,7 +74,7 @@ export default {
     // 分页查询
     troopList() {
       axios
-        .get(this.$global_msg.host + "troop/list", {
+        .get(this.$global_msg.host + "/troop/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -96,7 +96,7 @@ export default {
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "troop/del?sys_id=" + row.id, {
+        .delete(this.$global_msg.host + "/troop/del?sys_id=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }

@@ -38,7 +38,7 @@ import axios from "axios";
 export default {
   created() {
     if (this.$route.params.id != null) {
-          let url = `${this.$global_msg.host}ipaddr/get-by-id?ip_id=${this.$route.params.id}`
+          let url = `${this.$global_msg.host}/ipaddr/get-by-id?ip_id=${this.$route.params.id}`
           let headers = {
             headers: {
               token: sessionStorage.getItem("token")
@@ -77,7 +77,7 @@ export default {
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "ipaddr/update",
+              url: this.$global_msg.host + "/ipaddr/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

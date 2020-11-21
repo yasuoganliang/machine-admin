@@ -17,7 +17,8 @@ export default new Vuex.Store({
     // 是否是管理员
     isSuper: sessionStorage.getItem('isSuper') ? sessionStorage.getItem('isSuper') : false,
     avatar_url: sessionStorage.getItem('avatar') ? sessionStorage.getItem('avatar') : null,
-    websock: sessionStorage.getItem('websock') ? sessionStorage.getItem('websock') : null
+    websock: sessionStorage.getItem('websock') ? sessionStorage.getItem('websock') : null,
+    socket: null,//websocket对象
   },
   mutations: {
     // 修改token，并将token存入localStorage
@@ -38,9 +39,9 @@ export default new Vuex.Store({
     },
     // 修改token，并将token存入localStorage
     setWebsock(state, websock) {
-      console.log(websock);
-      state.websock = user.websock;
-      sessionStorage.setItem('websock', user.websock);
+      // console.log(websock);
+      state.websock = websock;
+      sessionStorage.setItem('websock', websock);
     }
   },
   actions: {

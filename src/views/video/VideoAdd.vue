@@ -1,7 +1,7 @@
 <template>
   <div class="troopEdit">
     <div>
-      <span>新增支队</span>
+      <span>新增视频</span>
       <el-divider></el-divider>
     </div>
 
@@ -70,7 +70,7 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}common/update-video?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}/common/update-video?token=${sessionStorage.getItem("token")}`
   },
   data() {
     return {
@@ -154,7 +154,7 @@ export default {
       axios
         .request({
           method: "post",
-          url: `${this.$global_msg.host}common/update-pic`,
+          url: `${this.$global_msg.host}/common/update-pic`,
           data: fd,
           headers: {
             "token": sessionStorage.getItem("token"),
@@ -196,7 +196,7 @@ export default {
           axios
             .request({
               method: "post",
-              url: this.$global_msg.host + "video/add",
+              url: this.$global_msg.host + "/video/add",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

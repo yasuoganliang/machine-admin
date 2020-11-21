@@ -101,7 +101,7 @@ export default {
     // 分页查询
     personList() {
       axios
-        .get(this.$global_msg.host + "person/list", {
+        .get(this.$global_msg.host + "/person/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -140,7 +140,7 @@ export default {
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "person/del?person_id=" + row.id, {
+        .delete(this.$global_msg.host + "/person/del?person_id=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }
@@ -168,7 +168,7 @@ export default {
     },
     search() {
       axios
-        .get(this.$global_msg.host + `person/search`, {
+        .get(this.$global_msg.host + `/person/search`, {
           params: {
             sys_id: sessionStorage.getItem("sys_id"),
             current: this.current,

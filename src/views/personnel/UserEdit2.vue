@@ -50,7 +50,7 @@ export default {
      // 获取用户信息
     console.log("this.$route.params.id: ", this.$route.params);
     if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}role/get-info-by-id?role_id=${this.$route.params.id}`
+      let url = `${this.$global_msg.host}/role/get-info-by-id?role_id=${this.$route.params.id}`
       axios
         .get(url, headers)
         .then(resp => {
@@ -108,7 +108,7 @@ export default {
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "admin/modify",
+              url: this.$global_msg.host + "/admin/modify",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),

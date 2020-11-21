@@ -77,7 +77,7 @@ export default {
     // 分页查询
     officerList() {
       axios
-        .get(this.$global_msg.host + "officer/list", {
+        .get(this.$global_msg.host + "/officer/list", {
           headers: {
             token: sessionStorage.getItem("token")
           },
@@ -108,7 +108,7 @@ export default {
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "officer/del?officer_id=" + row.id, {
+        .delete(this.$global_msg.host + "/officer/del?officer_id=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }
