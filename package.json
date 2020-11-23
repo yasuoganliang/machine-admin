@@ -1,7 +1,7 @@
 {
-  "name": "admin",
-  "version": "0.1.0",
-  "author": "bhkj",
+  "name": "machine-admin",
+  "version": "1.0.0",
+  "author": "红河佰恒科技有限公司",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,8 +10,7 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "electron_build": "electron-packager ./dist/ --icon=./public/timg.jpg --overwrite"
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {

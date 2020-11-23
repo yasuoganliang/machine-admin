@@ -102,7 +102,7 @@ export default {
         token: sessionStorage.getItem("token")
       }
     }
-    axios.get(this.$global_msg.host + "troop/list", headers).then(resp => {
+    axios.get(this.$global_msg.host + "/troop/list", headers).then(resp => {
       console.log("resp: ", resp);
       this.troops = resp.data.troopList;
     });
@@ -212,7 +212,7 @@ export default {
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },

@@ -23,7 +23,7 @@ module.exports = {
         electronBuilder: {
             builderOptions: {
                 "appId": "com.example.app",
-                "productName":"machine",//项目名，也是生成的安装文件名，即aDemo.exe
+                "productName":"荣誉室查询一体机管理系统",//项目名，也是生成的安装文件名，即aDemo.exe
                 "copyright":"Copyright © 2020",//版权信息
                 "directories":{
                     "output":"./dist"//输出文件路径
@@ -49,7 +49,7 @@ module.exports = {
                     "installerHeaderIcon": "./public/haha.ico", // 安装时头部图标
                     "createDesktopShortcut": true, // 创建桌面图标
                     "createStartMenuShortcut": true,// 创建开始菜单图标
-                    "shortcutName": "haha", // 图标名称
+                    "shortcutName": "荣誉室查询一体机管理系统", // 图标名称
                 },
             }
         },
@@ -62,7 +62,7 @@ module.exports = {
         //     //设置应用图标
         //     icon: './public/timg.jpg'
         // },
-        productName: '一体机管理系统'
+        productName: '荣誉室查询一体机管理系统'
     }
 
 }

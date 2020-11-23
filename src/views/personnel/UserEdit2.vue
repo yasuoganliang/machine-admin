@@ -118,7 +118,7 @@ export default {
             .then(
               resp => {
                 console.log("/admin/modify: ", resp);
-                if (resp.status == 200 && resp.data.statusCode == 1) {
+                if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "修改成功",
@@ -127,7 +127,7 @@ export default {
                 } else {
                   this.$notify.error({
                     title: "失败",
-                    message: resp.data.message
+                    message: resp.message
                   });
                 }
               },

@@ -100,9 +100,31 @@ export default {
         this.$message.error("请输入合法的ip + 端口");
         return
       }
-      this.setServerHost(this.ipAndPort);
-      this.$global_msg["host"] = this.ipAndPort;
-      this.dialogFormVisible = false;
+      axios({
+          method: "GET",
+          url: this.ipAndPort + "/common/test",
+        })
+          .then((res) => {
+            console.log("res: ", res);
+            if (res.statusCode == 1) {
+              this.setServerHost(this.ipAndPort);
+              this.$global_msg["host"] = this.ipAndPort;
+              this.dialogFormVisible = false;
+              this.$notify({
+                title: "连接成功",
+                message: "服务器连接成功",
+                type: "success"
+              });
+            } else if (res.statusCode == 1003) {
+              this.$message.error("status 404: ", res.message);
+            } else {
+              this.$message.error(`status ${res.status}: `,res.message);
+            }
+          })
+          .catch((err) => {
+            console.error("err: ", err);
+            this.$message.error("请检查网络");
+          });
     },
     initWebSocket(data) {
       const that = this;

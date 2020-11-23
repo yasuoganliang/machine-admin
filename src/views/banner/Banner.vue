@@ -98,7 +98,7 @@ export default {
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "banner/del?banner_ids=" + row.id, {
+        .delete(this.$global_msg.host + "/banner/del?banner_ids=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }

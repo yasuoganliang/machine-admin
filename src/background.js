@@ -48,10 +48,10 @@ function createMenu() {
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 1010,
-        height: 670,
-        minHeight: 670,
-        minWidth: 1010,
+        width: 1080,
+        height: 680,
+        minHeight: 680,
+        minWidth: 1080,
         webPreferences: {
             nodeIntegration: true,
             //解决跨域问题

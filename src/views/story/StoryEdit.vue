@@ -142,6 +142,7 @@ export default {
       console.log("submit!");
       this.$refs[form].validate(valid => {
         if (valid) {
+          this.form.story_id = this.form.id;
           axios
             .request({
               method: "put",
