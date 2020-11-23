@@ -47,10 +47,10 @@ axios.interceptors.response.use(res => {
     return res.data
   }
 }, err => {
-  app.$notify.error({
-    title: '服务错误',
-    message: '服务器响应错误 ' + err.message
-  })
+  // app.$notify.error({
+  //   title: '服务器响应错误',
+  //   message: '服务器响应错误 ' + err.message
+  // })
   return Promise.reject(err)
 })
 

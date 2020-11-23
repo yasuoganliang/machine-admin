@@ -13,6 +13,7 @@
       <li>express</li>
       <li>websocket</li>
       <li>mysql</li>
+      <li>redis</li>
     </ul>
   </div>
 </template>

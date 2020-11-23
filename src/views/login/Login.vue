@@ -78,7 +78,23 @@ export default {
     if (!!host) {
       this.dialogFormVisible = false;
       this.$global_msg.host = host;
-    }
+    } 
+
+    axios({
+          method: "GET",
+          url: host + "/common/test",
+        })
+          .then((res) => {
+            console.log("res: ", res);
+            if (res.statusCode !== 1) {
+              this.dialogFormVisible = true;
+              this.$message.error(`status ${res.statusCode}: `,res.message);
+            }
+          })
+          .catch((err) => {
+            this.dialogFormVisible = true;
+            // this.$message.error("请检查网络");
+          });
   },
   data() {
     return {
@@ -115,10 +131,8 @@ export default {
                 message: "服务器连接成功",
                 type: "success"
               });
-            } else if (res.statusCode == 1003) {
-              this.$message.error("status 404: ", res.message);
             } else {
-              this.$message.error(`status ${res.status}: `,res.message);
+              this.$message.error(`status ${res.statusCode}: `,res.message);
             }
           })
           .catch((err) => {
