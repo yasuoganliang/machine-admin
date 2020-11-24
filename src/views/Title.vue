@@ -30,8 +30,8 @@
         placement="bottom-end"
       >
         <span class="el-dropdown-link">
-          <span v-if="isSuper">管理员</span>
-          <span v-else>用户</span>
+          <span v-if="isSuper">超级管理员</span>
+          <span v-else>管理员</span>
           <i class="el-icon-caret-bottom"></i>
         </span>
         <el-dropdown-menu slot="dropdown" style="top: 40px" size="mini">
