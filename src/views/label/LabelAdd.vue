@@ -81,6 +81,7 @@ export default {
                     type: "success"
                   });
                   this.$router.push("/label");
+                  // this.$router.go(-1);
                 } else {
                   this.$notify.error({
                     title: "失败",

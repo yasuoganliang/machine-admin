@@ -54,7 +54,7 @@
       </el-submenu>
       <el-submenu index="6">
         <template slot="title">
-          <i class="el-icon-setting iconfont icon-zuidahua"></i>红色记忆</template>
+          <i class="el-icon-setting iconfont icon-zuidahua"></i>功勋卓著</template>
         <el-menu-item-group>
           <el-menu-item index="6-1" @click="openPage(17)">视频列表</el-menu-item>
           <el-menu-item index="6-2" @click="openPage(18)">增加视频</el-menu-item>

@@ -144,6 +144,8 @@ export default {
         })
         .then(resp => {
           console.log("resp: ", resp);
+          this.formInline.name = null;
+          this.formInline.enlist_year = null;
           this.tableData = resp.data.personList.map((item => {
             return {
               id: item.id,
@@ -199,10 +201,14 @@ export default {
       this.troopList();
     },
     search() {
+      let sysId = sessionStorage.getItem("sys_id");
+      if (!!this.sys_id) {
+        sysId = this.sys_id;
+      }
       axios
         .get(this.$global_msg.host + `/person/search`, {
           params: {
-            sys_id: sessionStorage.getItem("sys_id"),
+            sys_id: sysId,
             current: this.current,
             size: this.size,
             name: this.formInline.name,
