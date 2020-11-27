@@ -12,16 +12,16 @@
       </el-menu-item>
       <el-submenu index="2" v-if="this.isSuper">
         <template slot="title">
-          <i class="el-icon-user iconfont icon-bumen"></i>支队管理
+          <i class="el-icon-user iconfont icon-bumen"></i>分队管理
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1" @click="openPage(11)">支队列表</el-menu-item>
-          <el-menu-item index="2-2" @click="openPage(12)">增加支队</el-menu-item>
+          <el-menu-item index="2-1" @click="openPage(11)">分队列表</el-menu-item>
+          <el-menu-item index="2-2" @click="openPage(12)">增加分队</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3" v-if="this.isSuper">
         <template slot="title">
-          <i class="el-icon-tickets iconfont icon-zengjiayonghu"></i>支队管理员
+          <i class="el-icon-tickets iconfont icon-zengjiayonghu"></i>分队管理员
         </template>
         <el-menu-item-group>
           <el-menu-item index="3-1" @click="openPage(13)">管理员列表</el-menu-item>
@@ -40,13 +40,16 @@
         <el-menu-item-group>
           <el-menu-item index="4-3" @click="openPage(10)">IP 地址</el-menu-item>
         </el-menu-item-group>
+        <el-menu-item-group>
+          <el-menu-item index="4-4" @click="openPage(23)">主官标签</el-menu-item>
+        </el-menu-item-group>
       </el-submenu>
       <el-submenu index="5">
         <template slot="title">
           <i class="el-icon-setting iconfont icon-yuangongliebiao"></i>红色家谱</template>
         <el-menu-item-group>
-          <el-menu-item index="4-1" @click="openPage(15)">官兵列表</el-menu-item>
-          <el-menu-item index="4-1" @click="openPage(16)">主官列表</el-menu-item>
+          <el-menu-item index="5-1" @click="openPage(15)">官兵列表</el-menu-item>
+          <el-menu-item index="5-1" @click="openPage(16)">主官列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="6">
@@ -141,6 +144,12 @@ export default {
           break;
         case 22:
           this.$router.push("/bannerAdd");
+          break;
+        case 23:
+          this.$router.push("/label");
+          break;
+        case 24:
+          this.$router.push("/labelAdd");
           break;
       }
     },

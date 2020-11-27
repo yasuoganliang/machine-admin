@@ -38,7 +38,7 @@
               :limit="1"
               :on-exceed="exceedhandle"
               :file-list="fileList"
-              :on-success="successuploadhandle" 
+              :on-success="successuploadhandle"
               accept="video"
               :before-upload="beforeUploadVideo"
               :on-error="handleError"
@@ -147,6 +147,7 @@ export default {
       this.imgurl = videoCover;
       this.upload = videoCover;
       this.form.pic_url = videoCover;
+      this.imageFile = videoCover;
       this.form.url = response.data.data[0].video_url;
       let fd = new FormData();
       let blob = this.dataURItoBlob(videoCover);

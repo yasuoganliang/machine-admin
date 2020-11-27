@@ -38,6 +38,10 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <br />
+          <el-form-item label="职务" prop="profession">
+            <el-input v-model="form.profession"></el-input>
+          </el-form-item>
+          <br />
           <el-form-item label="在任时间" prop="work_time">
             <el-col :span="8">
               <el-date-picker type="month" placeholder="任期开始时间" v-model="form.work_start_time" style="width: 100%;" prop="work_start_time"></el-date-picker>
@@ -122,7 +126,8 @@ export default {
         label_id: "",
         work_start_time: "",
         work_end_time: "",
-        avatar: null
+        avatar: null,
+        profession: ""
       },
       pickerOptions:{
         disabledDate(time) {
@@ -140,6 +145,9 @@ export default {
         ],
         label_name: [
           { required: true, message: "请选择标签名", trigger: "blur" }
+        ],
+        profession: [
+          { required: true, message: "请输入职务", trigger: "blur" }
         ],
         
       },

@@ -1,7 +1,7 @@
 <template>
-  <div class="userEdit">
+  <div class="ipaddrEdit">
     <div>
-      <span>编辑个人信息</span>
+      <span>编辑主官标签名称</span>
       <el-divider></el-divider>
     </div>
 
@@ -16,16 +16,13 @@
           size="mini"
           :inline="true"
         >
-         <el-form-item prop="name" label="管理员名称">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item label="主官标签名称" prop="label_name">
+            <el-input v-model="form.label_name"></el-input>
           </el-form-item>
           <br />
-          <el-form-item prop="passwd" label="管理员密码">
-            <el-input v-model="form.passwd" show-password></el-input>
-          </el-form-item>
-          <br />
-          <el-form-item>
+          <el-form-item class="el-submit">
             <el-button type="primary" @click="onSubmit('form')">立即修改</el-button>
+            <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -37,93 +34,67 @@
 
 <script>
 import axios from "axios";
-import { mapMutations, mapState } from "vuex";
 
 export default {
-  computed: mapState(["adminId", "isSuper"]), //得到vuex 里面的用户信息
   created() {
-    let headers = {
-      headers: {
-        token: sessionStorage.getItem("token")
-      }
-    }
-     // 获取用户信息
-    console.log("this.$route.params.id: ", this.$route.params);
     if (this.$route.params.id != null) {
-      let url = `${this.$global_msg.host}/role/get-info-by-id?role_id=${this.$route.params.id}`
-      axios
-        .get(url, headers)
-        .then(resp => {
-          // console.log(resp);
-          this.form = resp.data.roleInfo;
-          // console.log(this.form);
-        });
-    }
+          let url = `${this.$global_msg.host}/label/get-by-id?label_id=${this.$route.params.id}`
+          let headers = {
+            headers: {
+              token: sessionStorage.getItem("token")
+            }
+          }
+          axios
+            .get(url, headers)
+            .then(resp => {
+              console.log("resp: ", resp)
+              this.form = resp.data.labelInfo;
+            });
+        }
   },
   data() {
     return {
-      isSuperAdmin: false,
-      isAdmin: true,
-      isEnable: true,
-      troops: [],
-      dialogVisible: false,
-      dialogImageUrl: "",
-      dialogVisible_2: false,
-      oldImg: false,
-      disabled: false,
-      fileList: [],
-      uploadUrl: "",
-      ruleForm: {},
-      upload: "",
       form: {
-        name: "",
-        avatar: "",
-        passwd: "",
-        role_id: null,
-        is_super_admin: 0,
-        is_admin: 1,
-        is_enable: 1,
-        sys_id: null,
+        label_name: ''
       },
       rules: {
-        name: [
-          { required: true, message: "请输入分队名称", trigger: "blur" },
-          { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
+        label_name: [
+          { required: true, message: "请输入主官标签名称", trigger: "blur" },
         ],
-        passwd: [
-          { required: true, message: "请输入管理员密码", trigger: "blur" }
-        ],
-        sys_id: [
-          { required: true, message: "请选择分队", trigger: "blur" }
-        ]
+        
       },
-      fits: ["fill"],
     };
   },
   methods: {
+    reset(form) {
+      this.$refs[form].resetFields();
+    },
     onSubmit(form) {
       console.log("submit!");
       this.$refs[form].validate(valid => {
         if (valid) {
+          this.form.label_id = this.form.id;
           axios
             .request({
               method: "put",
-              url: this.$global_msg.host + "/admin/modify",
+              url: this.$global_msg.host + "/label/update",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),
                 "Content-Type": "application/json;charset=UTF-8"
               }
             })
+
             .then(
               resp => {
-                console.log("/admin/modify: ", resp);
+                console.log(resp);
                 if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
                     message: "修改成功",
                     type: "success"
                   });
+                  this.$router.push("/label");
                 } else {
                   this.$notify.error({
                     title: "失败",
@@ -139,12 +110,15 @@ export default {
               }
             );
         } else {
-          console.log("error submit!!");
+          this.$notify.error({
+            title: "失败",
+            message: "请检查表单数据是否正确"
+          });
           return false;
         }
       });
       console.log(this.form);
-    }
+    },
   }
 };
 </script>
@@ -156,8 +130,23 @@ export default {
   .avator {
     margin-left: 30px;
   }
-  .el-button {
+  .el-submit {
     margin-left: 200px;
   }
+}
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>

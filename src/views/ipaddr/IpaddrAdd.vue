@@ -1,7 +1,7 @@
 <template>
   <div class="ipaddrEdit">
     <div>
-      <span>添加支队主机 IP 地址</span>
+      <span>添加分队主机 IP 地址</span>
       <el-divider></el-divider>
     </div>
 

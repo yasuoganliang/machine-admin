@@ -1,7 +1,7 @@
 <template>
   <div class="troopEdit">
     <div>
-      <span>新增支队</span>
+      <span>新增分队</span>
       <el-divider></el-divider>
     </div>
 
@@ -48,7 +48,7 @@
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+              <img width="100%" height="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
           </el-form-item>
           <br />
@@ -94,7 +94,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: "请输入支队名称", trigger: "blur" },
+          { required: true, message: "请输入分队名称", trigger: "blur" },
           { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
         ],
         ip: [

@@ -1,8 +1,8 @@
 <template>
-  <div id="officerList">
+  <div id="bannerList">
     <div class="box-header">
       <div>
-        <span style="margin-right: 10px">主官列表</span>
+        <span style="margin-right: 10px">标签列表</span>
         <el-select v-model="sys_id" placeholder="选择分队" size="mini" @change="selectSuccess" v-if="this.isSuper">
           <el-option
             v-for="(troop, index) in troops"
@@ -27,15 +27,7 @@
       size="mini"
     >
       <el-table-column prop="id" label="ID" width="65"></el-table-column>
-      <el-table-column prop="avatar" label="照片">
-        <template   slot-scope="scope">
-          <img :src="scope.row.avatar"  min-width="220" height="70" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="work_time" label="在任时间"></el-table-column>
-      <el-table-column prop="profession" label="职务"></el-table-column>
-      <el-table-column prop="label_name" label="所属标签"></el-table-column>
+      <el-table-column prop="label_name" label="标签名称"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope" prop="id">
           <el-button type="text" size="small" @click="handleClick(2, scope.row)">编辑</el-button>
@@ -83,9 +75,31 @@ export default {
   created() {
     // 声命周期钩子函数
     this.troopList();
-    this.officerList();
+    this.labelList();
   },
   methods: {
+    labelList() {
+      let sysId = sessionStorage.getItem("sys_id");
+      if (!!this.sys_id) {
+        sysId = this.sys_id;
+      }
+      axios
+        .get(this.$global_msg.host + `/label/list`, {
+          headers: {
+            token: sessionStorage.getItem("token")
+          },
+          params: {
+            troop_id: sysId,
+            sys_id: sessionStorage.getItem("sys_id"),
+            current: this.current,
+            size: this.size
+          }
+        })
+        .then(resp => {
+          console.log("resp: ", resp);
+          this.tableData = resp.data.labelList;
+        });
+    },
     troopList() {
       let headers = {
         headers: {
@@ -100,40 +114,10 @@ export default {
     },
     selectSuccess() {
       console.log("sys_id: ", this.sys_id);
-      this.officerList();
-    },
-    // 分页查询
-    officerList() {
-      let sysId = sessionStorage.getItem("sys_id");
-      if (!!this.sys_id) {
-        sysId = this.sys_id;
-      }
-      axios
-        .get(this.$global_msg.host + `/officer/list?troop_id=${sysId}`, {
-          headers: {
-            token: sessionStorage.getItem("token")
-          },
-          params: {
-            current: this.current,
-            size: this.size
-          }
-        })
-        .then(resp => {
-          console.log("resp: ", resp);
-          this.tableData = resp.data.officerList.map(item => {
-            return {
-              "id": item.id,
-              "avatar": item.avatar,
-              "name": item.name,
-              "work_time": `${item.work_start_time} - ${item.work_end_time}`,
-              "label_name": item.label_name,
-              "profession": item.profession
-            }
-          });
-        });
+      this.labelList();
     },
     jumpTo() {
-      this.$router.push({ path: "/officerAdd" });
+      this.$router.push({ path: "/labelAdd" });
     },
     //操作栏处理函数
     handleClick(i, row) {
@@ -141,7 +125,7 @@ export default {
       if (i == 1) {
         const that = this;
         axios
-        .delete(this.$global_msg.host + "/officer/del?officer_id=" + row.id, {
+        .delete(this.$global_msg.host + "/label/del?label_id=" + row.id, {
           headers: {
             token: sessionStorage.getItem("token")
           }
@@ -151,7 +135,7 @@ export default {
         });
       }
       if (i == 2) {
-        this.$router.push({ name: "officerEdit", params: { id: row.id } });
+        this.$router.push({ name: "labelEdit", params: { id: row.id } });
       }
     },
     handleSelectionChange() {},

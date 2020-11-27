@@ -1,7 +1,7 @@
 <template>
   <div class="troopEdit">
     <div>
-      <span>编辑支队信息</span>
+      <span>编辑分队信息</span>
       <el-divider></el-divider>
     </div>
 
@@ -183,6 +183,7 @@ export default {
       this.imgurl = videoCover;
       this.upload = videoCover;
       this.form.pic_url = videoCover;
+      this.imageFile = videoCover;
       this.form.url = response.data.data[0].video_url;
       let fd = new FormData();
       let blob = this.dataURItoBlob(videoCover);

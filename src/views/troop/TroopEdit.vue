@@ -1,7 +1,7 @@
 <template>
   <div class="troopEdit">
     <div>
-      <span>编辑支队信息</span>
+      <span>编辑分队信息</span>
       <el-divider></el-divider>
     </div>
 
@@ -16,8 +16,8 @@
           size="mini"
           :inline="true"
         >
-          <!-- <el-form-item label="支队" prop="troop">
-            <el-select v-model="form.id" placeholder="选择支队">
+          <!-- <el-form-item label="分队" prop="troop">
+            <el-select v-model="form.id" placeholder="选择分队">
               <el-option
                 v-for="(troop, index) in troops"
                 :label="troop.name"
@@ -133,7 +133,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: "请输入支队名称", trigger: "blur" },
+          { required: true, message: "请输入分队名称", trigger: "blur" },
           { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
         ],
         ip: [

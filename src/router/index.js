@@ -17,7 +17,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/welcome/Welcome')
       },
       {
-        // 支队信息列表
+        // 分队信息列表
         path: '/troop',
         name: 'troop',
         component: () => import('../views/troop/Troop')
@@ -62,6 +62,22 @@ const routes = [
         path: '/roleInfo',
         name: 'roleInfo',
         component: () => import('../views/role/RoleInfo.vue')
+      },
+      {
+        // 管理员角色列表
+        path: '/label',
+        name: 'label',
+        component: () => import('../views/label/label')
+      },
+      {
+        path: '/labelAdd',
+        name: 'labelAdd',
+        component: () => import('../views/label/LabelAdd.vue')
+      },
+      {
+        path: '/labelEdit/:id',
+        name: 'labelEdit',
+        component: () => import('../views/label/LabelEdit.vue')
       },
       {
         // 官兵信息列表

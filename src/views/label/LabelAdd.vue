@@ -1,7 +1,7 @@
 <template>
   <div class="ipaddrEdit">
     <div>
-      <span>编辑 IP 地址</span>
+      <span>添加主官标签名称</span>
       <el-divider></el-divider>
     </div>
 
@@ -16,12 +16,12 @@
           size="mini"
           :inline="true"
         >
-          <el-form-item label="ipv4 地址" prop="ipv4">
-            <el-input v-model="form.ipv4"></el-input>
+          <el-form-item label="主官标签名称" prop="label_name">
+            <el-input v-model="form.label_name"></el-input>
           </el-form-item>
           <br />
           <el-form-item class="el-submit">
-            <el-button type="primary" @click="onSubmit('form')">立即修改</el-button>
+            <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
             <el-button @click="reset('form')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -37,29 +37,16 @@ import axios from "axios";
 
 export default {
   created() {
-    if (this.$route.params.id != null) {
-          let url = `${this.$global_msg.host}/ipaddr/get-by-id?ip_id=${this.$route.params.id}`
-          let headers = {
-            headers: {
-              token: sessionStorage.getItem("token")
-            }
-          }
-          axios
-            .get(url, headers)
-            .then(resp => {
-              console.log("resp: ", resp)
-              this.form = resp.data.ipaddrInfo;
-            });
-        }
+
   },
   data() {
     return {
       form: {
-        ipv4: ''
+        label_name: ''
       },
       rules: {
-        ipv4: [
-          { required: true, message: "请输入 ipv4 地址", trigger: "blur" },
+        label_name: [
+          { required: true, message: "请输入主官标签名称", trigger: "blur" },
         ],
         
       },
@@ -73,11 +60,10 @@ export default {
       console.log("submit!");
       this.$refs[form].validate(valid => {
         if (valid) {
-          this.form.ip_id = this.form.id;
           axios
             .request({
-              method: "put",
-              url: this.$global_msg.host + "/ipaddr/update",
+              method: "post",
+              url: this.$global_msg.host + "/label/add",
               data: this.form,
               headers: {
                 "token": sessionStorage.getItem("token"),
@@ -91,10 +77,10 @@ export default {
                 if (resp.statusCode == 1) {
                   this.$notify({
                     title: "成功",
-                    message: "修改成功",
+                    message: "添加成功",
                     type: "success"
                   });
-                  this.$router.push("/ipaddr");
+                  this.$router.push("/label");
                 } else {
                   this.$notify.error({
                     title: "失败",

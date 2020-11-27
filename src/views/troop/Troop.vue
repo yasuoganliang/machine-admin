@@ -10,8 +10,8 @@
       v-loading="loading"
       size="mini"
     >
-      <el-table-column prop="id" label="支队ID" width="65"></el-table-column>
-      <el-table-column prop="name" label="支队名称"></el-table-column>
+      <el-table-column prop="id" label="分队ID" width="65"></el-table-column>
+      <el-table-column prop="name" label="分队名称"></el-table-column>
       <!-- <el-table-column prop="ip" label="IP网段" width="105"></el-table-column> -->
       <el-table-column prop="home_url" label="首页链接"></el-table-column>
       <el-table-column prop="background_url" label="背景图片">

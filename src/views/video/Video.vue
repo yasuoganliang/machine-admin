@@ -1,5 +1,13 @@
 <template>
   <div id="userList">
+    <el-select v-model="sys_id" placeholder="选择分队" @change="selectSuccess" v-if="this.isSuper">
+      <el-option
+        v-for="(troop, index) in troops"
+        :label="troop.name"
+        :value="troop.id"
+        :key="index"
+      ></el-option>
+    </el-select>
     <el-table
       ref="singleTable"
       :data="tableData"
@@ -50,6 +58,8 @@ export default {
   inject:['reload'],
   data() {
     return {
+      sys_id: null,
+      troops: [],
       tableData: [],
       current: 1, //当前页面
       size: 10, //每页显示条数
@@ -65,12 +75,33 @@ export default {
   created() {
     // 声命周期钩子函数
     this.troopList();
+    this.videoList();
   },
   methods: {
-    // 分页查询
     troopList() {
+      let headers = {
+        headers: {
+          token: sessionStorage.getItem("token")
+        }
+      }
+
+      axios.get(this.$global_msg.host + `/troop/list`, headers).then(resp => {
+        console.log("resp: ", resp);
+        this.troops = resp.data.troopList;
+      });
+    },
+    selectSuccess() {
+      console.log("sys_id: ", this.sys_id);
+      this.videoList();
+    },
+    // 分页查询
+    videoList() {
+      let sysId = sessionStorage.getItem("sys_id");
+      if (!!this.sys_id) {
+        sysId = this.sys_id;
+      }
       axios
-        .get(this.$global_msg.host + "/video/list", {
+        .get(this.$global_msg.host + `/video/list?troop_id=${sysId}`, {
           headers: {
             token: sessionStorage.getItem("token")
           },

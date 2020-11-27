@@ -30,5 +30,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style >
+  .el-upload-list--picture-card .el-upload-list__item{
+    border:none !important;
+  }
+  .el-upload-list__item-thumbnail{
+    height: auto !important;
+  }
+.el-form-item__content img{
+    height: auto !important;
+  }
 </style>

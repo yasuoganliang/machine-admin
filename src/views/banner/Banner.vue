@@ -2,7 +2,15 @@
   <div id="bannerList">
     <div class="box-header">
       <div>
-        <span>幻灯片列表</span>
+        <span style="margin-right: 10px">幻灯片列表</span>
+        <el-select v-model="sys_id" placeholder="选择分队" size="mini" @change="selectSuccess" v-if="this.isSuper">
+          <el-option
+            v-for="(troop, index) in troops"
+            :label="troop.name"
+            :value="troop.id"
+            :key="index"
+          ></el-option>
+        </el-select>
       </div>
       <div>
         <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"  @click="jumpTo()">添加</el-button>
@@ -55,6 +63,8 @@ export default {
   inject:['reload'],
   data() {
     return {
+      troops: [],
+      sys_id: null,
       tableData: [],
       current: 1, //当前页面
       size: 10, //每页显示条数
@@ -69,13 +79,35 @@ export default {
   },
   created() {
     // 声命周期钩子函数
+    this.troopList();
     this.bannerList();
   },
   methods: {
+    troopList() {
+      let headers = {
+        headers: {
+          token: sessionStorage.getItem("token")
+        }
+      }
+
+      axios.get(this.$global_msg.host + `/troop/list`, headers).then(resp => {
+        console.log("resp: ", resp);
+        this.troops = resp.data.troopList;
+      });
+    },
+    selectSuccess() {
+      console.log("sys_id: ", this.sys_id);
+      this.bannerList();
+    },
+
     // 分页查询
     bannerList() {
+      let sysId = sessionStorage.getItem("sys_id");
+      if (!!this.sys_id) {
+        sysId = this.sys_id;
+      }
       axios
-        .get(this.$global_msg.host + "/banner/list", {
+        .get(this.$global_msg.host + `/banner/list?troop_id=${sysId}`, {
           headers: {
             token: sessionStorage.getItem("token")
           },

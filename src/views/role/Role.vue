@@ -17,7 +17,7 @@
           <img :src="scope.row.avatar"  min-width="220" height="70" />
         </template>
       </el-table-column> -->
-      <el-table-column prop="troop_name" label="所属支队"></el-table-column>
+      <el-table-column prop="troop_name" label="所属分队"></el-table-column>
       <el-table-column prop="is_super_admin" label="超级管理员">
         <template slot-scope="scope">{{ scope.row.is_super_admin == 1 ? '是': '否' }}</template>
       </el-table-column>
