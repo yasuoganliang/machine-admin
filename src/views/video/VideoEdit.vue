@@ -16,12 +16,12 @@
           size="mini"
           :inline="true"
         >
-        <el-form-item label="视频标题" prop="ip">
+        <el-form-item label="名称" prop="ip">
             <el-input v-model="form.title"></el-input>
           </el-form-item>
           <br />
           <el-form-item label="详情介绍" prop="content">
-            <el-input  type="textarea" v-model="form.content"></el-input>
+            <el-input  type="textarea" v-model="form.content" style="width: 500px;"></el-input>
           </el-form-item>
           <br />
           <el-form-item label="排序值" prop="sort">
@@ -37,19 +37,12 @@
             <!-- <el-input v-model="form.standby_time"></el-input> -->
           </el-form-item>
           <br />
-          <el-form-item label="视频上传" prop="pic_url">
+          <el-form-item label="图片上传"  prop="pic_url">
             <el-upload
               :action="uploadUrl"
               list-type="picture-card"
-              :data="uploadData"
-              name="file"
-              auto-upload: false
-              :limit="1"
-              :on-exceed="exceedhandle"
-              :file-list="fileList"
-              :on-success="successuploadhandle" 
-              accept="video"
-              :before-upload="beforeUploadVideo"
+              :on-exceed="handleExceed"
+              :on-success="handleSuccess"
               :on-error="handleError"
               :on-change="handleChange"
               ref="upload"
@@ -60,6 +53,17 @@
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
+          </el-form-item>
+          <br />
+           <el-form-item label="原图片">
+            <img
+              :src="originUrl"
+              style="border-radius: 5%"
+              alt="原背景图片"
+              width="146px"
+              height="146px"
+              fit="cover"
+            />
           </el-form-item>
           <br />
           <el-form-item  class="el-submit">
@@ -79,7 +83,7 @@ import axios from "axios";
 
 export default {
   created() {
-    this.uploadUrl = `${this.$global_msg.host}/common/update-video?token=${sessionStorage.getItem("token")}`
+    this.uploadUrl = `${this.$global_msg.host}/common/update-pic?token=${sessionStorage.getItem("token")}`
     let headers = {
       headers: {
         token: sessionStorage.getItem("token")
@@ -94,6 +98,7 @@ export default {
         .then(resp => {
           console.log("video_id: ", resp);
           this.form = resp.data.videoInfo;
+          this.originUrl = resp.data.videoInfo.pic_url;
           this.upload = resp.data.videoInfo.pic_url
           console.log(this.form);
         });
@@ -108,6 +113,7 @@ export default {
       dialogVisible: false,
       modlevidel: "",
       imgurl: "",
+      originUrl: "",
       dialogImageUrl: "",
       fileList: [],
       uploadUrl: "",
@@ -129,8 +135,11 @@ export default {
       },
       rules: {
         title: [
-          { required: true, message: "请输入视频标题", trigger: "blur" },
+          { required: true, message: "请输入名称", trigger: "blur" },
           { min: 1, max: 40, message: "长度在 1 到 40 个字符", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "请输入详情介绍", trigger: "blur" }
         ]
       },
       fits: ["fill"],
@@ -179,42 +188,42 @@ export default {
           message: "上传失败，请稍后再试"
         });
       }
-      const videoCover = await this.getVideoBase64(response.data.data[0].video_url);
-      this.imgurl = videoCover;
-      this.upload = videoCover;
-      this.form.pic_url = videoCover;
-      this.imageFile = videoCover;
-      this.form.url = response.data.data[0].video_url;
-      let fd = new FormData();
-      let blob = this.dataURItoBlob(videoCover);
-      fd.append('image', blob);
-      axios
-        .request({
-          method: "post",
-          url: `${this.$global_msg.host}/common/update-pic`,
-          data: fd,
-          headers: {
-            "token": sessionStorage.getItem("token"),
-            "Content-Type": "application/json;charset=UTF-8"
-          }
-        })
-        .then(
-          resp => {
-            this.form.pic_url = resp.data.data[0].pic_url
-            this.$notify({
-              title: "成功",
-              message: "视频上传成功",
-              type: "success"
-            });
-          },
-          error => {
-            console.error("error: ", error);
-            this.$notify.error({
-              title: "失败",
-              message: "连接服务器失败"
-            });
-          }
-        );
+      // const videoCover = await this.getVideoBase64(response.data.data[0].video_url);
+      // this.imgurl = videoCover;
+      // this.upload = videoCover;
+      this.form.pic_url = response.data.data[0].pic_url;
+      // this.imageFile = videoCover;
+      this.form.url = response.data.data[0].pic_url;
+      // let fd = new FormData();
+      // let blob = this.dataURItoBlob(videoCover);
+      // fd.append('image', blob);
+      // axios
+      //   .request({
+      //     method: "post",
+      //     url: `${this.$global_msg.host}/common/update-pic`,
+      //     data: fd,
+      //     headers: {
+      //       "token": sessionStorage.getItem("token"),
+      //       "Content-Type": "application/json;charset=UTF-8"
+      //     }
+      //   })
+      //   .then(
+      //     resp => {
+      //       this.form.pic_url = resp.data.data[0].pic_url
+      //       this.$notify({
+      //         title: "成功",
+      //         message: "视频上传成功",
+      //         type: "success"
+      //       });
+      //     },
+      //     error => {
+      //       console.error("error: ", error);
+      //       this.$notify.error({
+      //         title: "失败",
+      //         message: "连接服务器失败"
+      //       });
+      //     }
+      //   );
     },
     dataURItoBlob(dataURI) {
       let byteString = atob(dataURI.split(',')[1]);
@@ -286,23 +295,39 @@ export default {
       // console.log(this.form);
     },
     handleChange(file, fileList) {
-      // console.log("handleChange: ", file);
+      console.log("handleChange: ", file);
       this.imageFile = file.raw;
       if (file.status === "success") {
-        // console.log("OK");
+        console.log("OK");
       }
     },
     handleError(err, file, fileList) {
       console.log("错误", err);
       this.$message.warning("上传图片失败请重试！");
     },
+
+    handleSuccess(res) {
+      console.log("handleSuccess: ", res);
+      this.$message.success("图片上传成功");
+      this.form.pic_url = res.data.data[0].pic_url;
+      this.form.url = res.data.data[0].pic_url;
+    },
     handleRemove(file, fileList) {;
       console.log("handleRemove: ", file);
     },
+
+    handleExceed(files, fileList) {
+      console.log("handleExceed: ", files, fileList);
+      this.$message.warning(`当前限制选择 1 个文件`);
+    },
+
     handlePictureCardPreview(file) {
       console.log("handlePictureCardPreview: ", file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleDownload(file) {
+      console.log(file);
     },
   }
 };

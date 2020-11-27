@@ -18,14 +18,14 @@
       v-loading="loading"
       size="mini"
     >
-      <el-table-column prop="id" label="视频ID" width="65"></el-table-column>
-      <el-table-column prop="title" label="视频标题"></el-table-column>
-      <el-table-column prop="pic_url" label="封面图">
+      <el-table-column prop="id" label="ID" width="65"></el-table-column>
+      <el-table-column prop="title" label="名称"></el-table-column>
+      <el-table-column prop="pic_url" label="图片">
         <template slot-scope="scope">
           <img :src="scope.row.pic_url"  min-width="220" height="70" />
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="视频链接"></el-table-column>
+      <!-- <el-table-column prop="url" label="视频链接"></el-table-column> -->
       <el-table-column prop="content" label="详情介绍"></el-table-column>
       <el-table-column prop="sort" label="排序值" width="65"></el-table-column>
       <el-table-column label="操作" width="120">
