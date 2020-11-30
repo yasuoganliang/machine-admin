@@ -235,20 +235,20 @@ export default {
               let endMonth = startTime.getMonth() + 1;
               let now = new Date();
               if (now.getMonth() + 1 == endMonth) {
-                this.form.work_start_time = `${startYear}-${startMonth > 9 ? startMonth : '0' + startMonth}`;
+                this.form.work_start_time = `${startYear}.${startMonth > 9 ? startMonth : '0' + startMonth}`;
                 this.form.work_end_time = '至今';
               } else {
-                this.form.work_start_time = `${startYear}-${startMonth > 9 ? startMonth : '0' + startMonth}`;
-                this.form.work_end_time = `${endYear}-${endMonth > 9 ? endMonth : '0' + endMonth}`;
+                this.form.work_start_time = `${startYear}.${startMonth > 9 ? startMonth : '0' + startMonth}`;
+                this.form.work_end_time = `${endYear}.${endMonth > 9 ? endMonth : '0' + endMonth}`;
               }
             }
             
             if (!endTime) {
-              this.form.work_start_time = `${startYear}-${startMonth > 9 ? startMonth : '0' + startMonth}`;
+              this.form.work_start_time = `${startYear}.${startMonth > 9 ? startMonth : '0' + startMonth}`;
               this.form.work_end_time = '至今';
             } else {
-              this.form.work_start_time = `${startYear}-${startMonth > 9 ? startMonth : '0' + startMonth}`;
-              this.form.work_end_time = `${endYear}-${endMonth > 9 ? endMonth : '0' + endMonth}`;
+              this.form.work_start_time = `${startYear}.${startMonth > 9 ? startMonth : '0' + startMonth}`;
+              this.form.work_end_time = `${endYear}.${endMonth > 9 ? endMonth : '0' + endMonth}`;
             }
           }
           
