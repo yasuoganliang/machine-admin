@@ -47,15 +47,22 @@
           <el-form-item label="部职别" prop="profession">
             <el-input v-model="form.profession"></el-input>
           </el-form-item>
-          <el-form-item label="政治面貌" prop="political_status">
+          <!-- <el-form-item label="政治面貌" prop="political_status">
             <el-input v-model="form.political_status"></el-input>
+          </el-form-item> -->
+          <el-form-item label="政治面貌" prop="political_status">
+            <el-radio-group v-model="form.political_status">
+              <el-radio :label="1">中共党员</el-radio>
+              <el-radio :label="2">中共团员</el-radio>
+              <el-radio :label="3">群众</el-radio>
+            </el-radio-group>
           </el-form-item>
           <br />
           <!-- <el-form-item label="出生日期" prop="birth">
             <el-col :span="11">
               <el-date-picker type="date" placeholder="选择出生日期" v-model="form.birth"></el-date-picker>
             </el-col>
-          </el-form-item> -->、
+          </el-form-item> -->
           <el-form-item label="出生年月" prop="birth">
             <el-date-picker v-model="form.birth" type="month" placeholder="选择出生年月"></el-date-picker>
           </el-form-item>
@@ -163,6 +170,14 @@ export default {
           this.form.enlist_month = this.form.enlist.getMonth() + 1;
           let gender = this.form.gender;
           this.form.gender = gender == 0 ?  "女" : "男";
+          let political_status = this.form.political_status;
+          if (political_status == 1) {
+            this.form.political_status = "中共党员";
+          } else if (political_status == 2) {
+            this.form.political_status = "中共团员";
+          } else {
+            this.form.political_status = "群众";
+          }
           axios
             .request({
               method: "post",

@@ -6,7 +6,7 @@
       :visible.sync="dialogFormVisible" 
       :close-on-click-modal="false"
       :close-on-press-escape="false">
-      <el-input v-model="ipAndPort" autocomplete="off" placeholder="localhost:3000"></el-input>
+      <el-input v-model="ipAndPort" autocomplete="off" placeholder="http://localhost:3000"></el-input>
       <div slot="footer" class="dialog-footer">
         <!-- <el-button @click="dialogFormVisible = false">取 消</el-button> -->
         <el-button type="primary" @click="confirmChangeIp">确 定</el-button>

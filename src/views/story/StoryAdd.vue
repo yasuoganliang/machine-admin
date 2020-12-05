@@ -20,10 +20,10 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="简介" prop="brief">
+          <!-- <el-form-item label="简介" prop="brief">
             <el-input type="textarea"  v-model="form.brief" style="width: 500px;"></el-input>
           </el-form-item>
-          <br />
+          <br /> -->
           <el-form-item label="详情" prop="details">
             <el-input type="textarea" v-model="form.details" style="width: 500px;"></el-input>
           </el-form-item>
@@ -84,7 +84,7 @@ export default {
       upload: "",
       form: {
         name: '',
-        brief: '',
+        brief: 'brief',
         details: '',
         remark: '',
         pic_url: '',
@@ -93,9 +93,9 @@ export default {
         name: [
           { required: true, message: "请输入姓名", trigger: "blur" },
         ],
-        brief: [
-          { required: true, message: "请输入个人事迹简介", trigger: "blur" }
-        ],
+        // brief: [
+        //   { required: true, message: "请输入个人事迹简介", trigger: "blur" }
+        // ],
         details: [
           { required: true, message: "请输入个人事迹详情", trigger: "blur" }
         ],
