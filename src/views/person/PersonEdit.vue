@@ -58,7 +58,11 @@
             <el-input v-model="form.profession"></el-input>
           </el-form-item>
           <el-form-item label="政治面貌" prop="political_status">
-            <el-input v-model="form.political_status"></el-input>
+            <el-radio-group v-model="form.political_status">
+              <el-radio :label="1">中共党员</el-radio>
+              <el-radio :label="2">中共团员</el-radio>
+              <el-radio :label="3">群众</el-radio>
+            </el-radio-group>
           </el-form-item>
           <br />
           <!-- <el-form-item label="出生日期" prop="birth">
@@ -115,6 +119,13 @@ export default {
           this.form.enlist = new Date(`${this.form.enlist_year}-${this.form.enlist_month}`)
           this.originUrl = resp.data.personInfo.avatar
           this.form.gender = this.form.gender == "男" ?  1 : 0;
+          if (this.form.political_status == "中共党员") {
+            this.form.political_status = 1;
+          } else if (this.form.political_status == "中共团员") {
+            this.form.political_status = 2;
+          } else {
+            this.form.political_status = 3;
+          }
           console.log(this.form);
         });
     }
@@ -137,7 +148,7 @@ export default {
         name: "",
         gender: "",
         profession: "",
-        political_status: "",
+        political_status: null,
         birth: "",
         enlist: "",
         enlist_year: null,
@@ -195,6 +206,14 @@ export default {
           let gender = this.form.gender;
           this.form.gender = gender == 0 ?  "女" : "男";
           this.form.person_id = this.form.id;
+          let political_status = this.form.political_status;
+          if (political_status == 1) {
+            this.form.political_status = "中共党员";
+          } else if (political_status == 2) {
+            this.form.political_status = "中共团员";
+          } else {
+            this.form.political_status = "群众";
+          }
           axios
             .request({
               method: "put",
