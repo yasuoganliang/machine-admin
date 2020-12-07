@@ -18,7 +18,7 @@ export default new Vuex.Store({
     isSuper: sessionStorage.getItem('isSuper') ? sessionStorage.getItem('isSuper') : false,
     avatar_url: sessionStorage.getItem('avatar') ? sessionStorage.getItem('avatar') : null,
     websock: sessionStorage.getItem('websock') ? sessionStorage.getItem('websock') : null,
-    socket: null,//websocket对象
+    socket: null, //websocket对象
     serverHost: null
   },
   mutations: {
@@ -39,10 +39,13 @@ export default new Vuex.Store({
       sessionStorage.setItem('avatar', user.avatar);
     },
     // 修改token，并将token存入localStorage
-    setWebsock(state, websock) {
-      // console.log(websock);
-      state.websock = websock;
-      sessionStorage.setItem('websock', websock);
+    // setWebsock(state, websock) {
+    //   // console.log(websock);
+    //   state.websock = websock;
+    //   // sessionStorage.setItem('websock', websock);
+    // },
+    setSocket(state, data) {
+      state.socket = data
     },
     // 修改token，并将token存入localStorage
     setServerHost(state, serverHost) {

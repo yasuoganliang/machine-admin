@@ -75,6 +75,11 @@ export default {
           break;
         case "d":
           sessionStorage.setItem("token", "");
+          console.log("socket", this.$store.state.socket);
+          if (this.$store.state.socket) {
+            // this.$store.state.socket.disconnect();
+            this.$store.commit("setSocket", "");
+          }
           this.$router.push("/admin/login");
           break;
       }

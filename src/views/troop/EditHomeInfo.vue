@@ -36,11 +36,11 @@
           <el-form-item label="首页链接" prop="home_url">
             <el-input v-model="form.home_url"></el-input>
           </el-form-item>
-          <el-form-item label="待机时长" prop="standby_time">
+          <el-form-item label="待机时长（秒）" prop="standby_time">
             <el-input v-model="form.standby_time"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="图片幻灯片播放时长" prop="banner_interval">
+          <el-form-item label="图片幻灯片播放时长（秒）" prop="banner_interval">
             <el-input v-model="form.banner_interval"></el-input>
           </el-form-item>
           <br />
@@ -96,7 +96,6 @@ export default {
       }
     }
 
-    
     let url = `${this.$global_msg.host}/troop/get-info-by-id?sys_id=${sessionStorage.getItem("sys_id")}`
     axios
       .get(url, headers)
@@ -160,6 +159,13 @@ export default {
       this.$refs[form].resetFields();
     },
     onSubmit(form) {
+      console.log("isSuper: ", sessionStorage.getItem("isSuper"))
+      if (1 != sessionStorage.getItem("isSuper")) {
+          return this.$notify.error({
+            title: "警告",
+            message: "您不是超级管理员，不可操作"
+          });
+      }
       this.$refs[form].validate(valid => {
         if (valid) {
           this.form.sys_id = this.form.id;

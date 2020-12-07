@@ -58,6 +58,7 @@
 <script>
 import axios from "axios";
 import { mapMutations, mapState } from "vuex";
+
 export default {
   computed: mapState(["isSuper"]),
   inject:['reload'],
@@ -126,7 +127,13 @@ export default {
     },
     //操作栏处理函数
     handleClick(i, row) {
-      console.log("handleClick: ", row);
+      console.log("handleClick: ", row, this.isSuper);
+      if (!this.isSuper) {
+          return this.$notify.error({
+            title: "警告",
+            message: "您不是超级管理员，不可操作"
+          });
+      }
       if (i == 1) {
         const that = this;
         axios

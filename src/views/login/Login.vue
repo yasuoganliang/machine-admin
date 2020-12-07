@@ -6,7 +6,7 @@
       :visible.sync="dialogFormVisible" 
       :close-on-click-modal="false"
       :close-on-press-escape="false">
-      <el-input v-model="ipAndPort" autocomplete="off" placeholder="localhost:3000"></el-input>
+      <el-input v-model="ipAndPort" autocomplete="off" placeholder="http://localhost:3000"></el-input>
       <div slot="footer" class="dialog-footer">
         <!-- <el-button @click="dialogFormVisible = false">取 消</el-button> -->
         <el-button type="primary" @click="confirmChangeIp">确 定</el-button>
@@ -146,22 +146,30 @@ export default {
       //初始化weosocket
       // console.log("初始化websocket: ", that.$global_msg.host);
       socket = io.connect(that.$global_msg.host);
-      // console.log("socket: ", socket);
-      if (!!socket) {
-        socket.emit("join", data);
-        socket.emit("ping-test", data);
-        socket.on("ping", data => {
+      that.$store.commit("setSocket", socket);
+      console.log("socket: ", that.$store.state.socket);
+      if (!!that.$store.state.socket) {
+        that.$store.state.socket.emit("join", data);
+        that.$store.state.socket.emit("ping-test", data);
+        that.$store.state.socket.on("ping", data => {
           console.log("ping data: ", data);
         });
 
         // 监听socket断开
-        socket.on("disconnect", async function (msg) {
-          console.log("socket 已断开:", msg);
+        that.$store.state.socket.on("disconnect", async function (reason) {
+          if (reason === 'io server disconnect') {
+            console.log("socket 已断开:", reason);
+            // the disconnection was initiated by the server, you need to reconnect manually
+            socket.connect();
+          } else if (reason === "io client disconnect") {
+            console.log("socket 已断开:", reason);
+          } else {
+            console.log("socket 已断开:", reason);
+            that.$store.state.socket = null;
+            that.initWebSocket(data);
+          }
           // clearInterval(timer);
-          socket = null;
-          that.initWebSocket(data);
         });
-        that.setWebsock(socket);
       }
     },
     close() {
