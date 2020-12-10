@@ -26,7 +26,7 @@
           <img :src="scope.row.pic_url"  min-width="220" height="70" />
         </template>
       </el-table-column>
-      <el-table-column prop="brief" label="简介"></el-table-column>
+      <!-- <el-table-column prop="brief" label="简介"></el-table-column> -->
       <el-table-column prop="details" label="详情"></el-table-column>
       <el-table-column prop="remark" label="备注"></el-table-column>
       <el-table-column label="操作" width="120">

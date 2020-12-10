@@ -56,8 +56,8 @@
         <template slot="title">
           <i class="el-icon-setting iconfont icon-zuidahua"></i>功勋卓著</template>
         <el-menu-item-group>
-          <el-menu-item index="6-1" @click="openPage(17)">视频列表</el-menu-item>
-          <el-menu-item index="6-2" @click="openPage(18)">增加视频</el-menu-item>
+          <el-menu-item index="6-1" @click="openPage(17)">功勋列表</el-menu-item>
+          <el-menu-item index="6-2" @click="openPage(18)">增加功勋</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="7">
@@ -73,7 +73,6 @@
           <i class="el-icon-user iconfont icon-wode"></i>个人信息</template>
         <el-menu-item-group>
           <el-menu-item index="8-1" @click="openPage(8)">修改个人信息</el-menu-item>
-          <!-- <el-menu-item index="3-2">选项2</el-menu-item> -->
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

@@ -26,11 +26,11 @@
           <el-form-item label="首页链接" prop="home_url">
             <el-input v-model="form.home_url"></el-input>
           </el-form-item>
-          <el-form-item label="待机时长" prop="standby_time">
+          <el-form-item label="待机时长（秒）" prop="standby_time">
             <el-input v-model="form.standby_time"></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="幻灯片播放时长" prop="banner_interval">
+          <el-form-item label="幻灯片播放时长（秒）" prop="banner_interval">
             <el-input v-model="form.banner_interval"></el-input>
           </el-form-item>
           <br />

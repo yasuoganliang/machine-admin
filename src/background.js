@@ -6,6 +6,7 @@ import {
     installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const { ipcMain } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -13,8 +14,6 @@ let win;
 
 //托盘对象
 var appTray = null;
-
-
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
@@ -25,7 +24,7 @@ function createMenu() {
     if (process.platform === 'darwin') {
         const template = [
             {
-                label: 'App demo',
+                label: 'App',
                 submenu: [
                     {
                         role: 'about'
@@ -148,6 +147,13 @@ app.on('ready', async () => {
     createWindow()
 })
 
+const os = require("os");
+const isWin7 = os.release().startsWith('6.1');
+if(isWin7) {
+	//win7下 ，关闭硬件加速
+	app.disableHardwareAcceleration();
+}
+
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
     if (process.platform === 'win32') {
@@ -163,17 +169,14 @@ if (isDevelopment) {
     }
 }
 
-
-const { ipcMain } = require('electron')
-
-
-
 // 放大，缩小，关闭事件机制
 ipcMain.on('min', (event, data) => {
+    // console.log("min: ", win);
     win.minimize();
 });
 
 ipcMain.on('max', (event, data) => {
+    // console.log("max: ", win);
     if (win.isMaximized() || win.isFullScreen()) {
         win.unmaximize();
     } else {
@@ -182,5 +185,6 @@ ipcMain.on('max', (event, data) => {
 });
 
 ipcMain.on('close', (event, data) => {
+    // console.log("close: ", win);
     win.close();
 });

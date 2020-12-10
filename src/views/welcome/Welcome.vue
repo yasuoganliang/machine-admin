@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     getConnect () {
-      let socket = this.$store.state.websock;
+      let socket = this.$store.state.socket;
       console.log("socket: ", `ws:admin:${sessionStorage.getItem('sys_id')}`, socket);
       if (!!socket) {
         socket.emit(`ws:admin:clientList`, 'getClientInfo');
